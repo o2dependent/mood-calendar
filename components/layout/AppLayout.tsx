@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import colors from '../../styles/colors';
+import AppNav from './AppNav';
 
 // --- layout ---
 export default function AppLayout({ children }) {
@@ -9,7 +10,7 @@ export default function AppLayout({ children }) {
 	// --- markup ---
 	return (
 		<Layout>
-			{isNavOpen ? <AppNav></AppNav> : null}
+			<AppNav />
 			<ChildrenWrap>{children}</ChildrenWrap>
 		</Layout>
 	);
@@ -29,11 +30,4 @@ const ChildrenWrap = styled.div`
 	width: 100%;
 	flex-grow: 1;
 	flex-direction: column;
-`;
-
-const AppNav = styled.nav`
-	max-width: 300px;
-	width: 20%;
-	height: 100%;
-	background-color: ${colors.dark.primary};
 `;

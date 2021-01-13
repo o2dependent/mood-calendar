@@ -1,25 +1,12 @@
-import { createGlobalStyle } from 'styled-components';
+import 'tailwindcss/tailwind.css';
 import '../styles/globals.css';
-// global style wrapper
-const GlobalStyles = createGlobalStyle`
-  html, body {
-    height: 100%;
-    width: 100%;
-    
-  }
+import { AuthProvider } from '../context/AuthContext';
 
-  * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-  }
-`;
 function MyApp({ Component, pageProps }) {
 	return (
-		<>
+		<AuthProvider>
 			<Component {...pageProps} />
-			<GlobalStyles />
-		</>
+		</AuthProvider>
 	);
 }
 

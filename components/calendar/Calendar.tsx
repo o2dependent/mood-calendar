@@ -6,6 +6,19 @@ import AppLayout from '../layout/AppLayout';
 import CalendarDays from './CalendarDays';
 import CalendarHeader from './CalendarHeader';
 
+// --- ts interfaces ---
+// for month event when getting days
+interface MonthEvent {
+	day: number;
+}
+// for days state in main calendar component
+interface Day {
+	month: string;
+	year: number;
+	day: number;
+	moods: boolean;
+}
+
 /* day event shape
   {
     month: 'Dec',
@@ -26,25 +39,38 @@ import CalendarHeader from './CalendarHeader';
   }
 */
 
-// --- context mimic --- TODO move to context
-const getDays = (curMonth, curYear) => {
+// --- context mimic ---
+const getDays = (curMonth: string, curYear: number) => {
+	// get events from API
+
+	const monthEventArr: Array<MonthEvent> = [
+		{ day: 21 },
+		{ day: 25 },
+		{ day: 30 },
+	];
+	// find last day of the month
 	const monthEndDate = Number(
 		moment(curMonth, 'MMM').endOf('month').format('D')
 	);
+	// get all days in the month
 	let daysArr = Array(monthEndDate)
-		.fill()
+		.fill(null)
 		.map((x, i) => ({
 			month: curMonth,
 			year: curYear,
 			day: String(i + 1),
-			time: '1:34',
-			moods: Math.round(Math.random()),
+			moods: false,
 		}));
+	// find how many days needed to fill calendar
 	const emptyDays = Array(
 		moment(`${curMonth}-1-${curYear}`, 'MMM-D-YYYY').weekday()
 	)
-		.fill()
+		.fill(null)
 		.map((x) => ({}));
+	// put all of the months events into the days array
+	monthEventArr.forEach((event: MonthEvent) => {
+		daysArr[event.day - 1].moods = true;
+	});
 	return [...emptyDays, ...daysArr];
 };
 
@@ -53,14 +79,17 @@ export default function Calendar() {
 	// --- variables ---
 	const m = moment();
 	const curDate = m.format('MMM-D-YYYY');
+
 	// --- state ---
-	const [days, setDays] = useState([]); // TODO make days get pulled from context
-	const [curMonth, setCurMonth] = useState(m.format('MMM')); // TODO make curMonth stored in context
+	const [days, setDays] = useState([]);
+	const [curMonth, setCurMonth] = useState(m.format('MMM'));
 	const [curYear, setCurYear] = useState(Number(m.format('YYYY')));
+
 	// --- hooks ---
 	useEffect(() => {
 		setDays(getDays(curMonth, curYear));
 	}, [curMonth, curYear]);
+
 	// --- markup ---
 	return (
 		<AppLayout>

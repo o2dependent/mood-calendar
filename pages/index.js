@@ -12,9 +12,15 @@ export default function Home() {
 				<title>Create Next App</title>
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
-			<nav>
+			<nav className='flex flex-col text-center'>
 				<Link href='/app'>
 					<a>Dashboard</a>
+				</Link>
+				<Link href='/signup'>
+					<a>Sign Up</a>
+				</Link>
+				<Link href='/login'>
+					<a>Log in</a>
 				</Link>
 			</nav>
 		</div>

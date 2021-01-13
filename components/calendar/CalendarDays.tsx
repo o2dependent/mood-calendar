@@ -35,9 +35,15 @@ export default function CalendarDays({ days, curDate }) {
 
 // --- styled components ---
 const CalendarDay = styled.div`
+	display: flex;
+	flex-direction: column;
+	& a {
+		flex-grow: 1;
+	}
 	width: 100%;
 	height: 100%;
-	background-color: ${colors.dark.secondary};
+	background-color: ${(p) =>
+		p.hasMood ? colors.dark.tertiary : colors.dark.secondary};
 	color: ${colors.dark.text};
 	border-bottom: 1px solid ${colors.dark.accent};
 	border-top: ${(p) =>
