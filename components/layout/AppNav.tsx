@@ -18,7 +18,7 @@ export default function AppNav() {
 	};
 
 	return (
-		<nav>
+		<nav className='w-100 h-24 flex flex-col justify-between'>
 			<span>{currentUser.email}</span>
 			<button onClick={handleLogout}>Logout</button>
 		</nav>

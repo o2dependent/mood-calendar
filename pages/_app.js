@@ -1,11 +1,14 @@
 import 'tailwindcss/tailwind.css';
 import '../styles/globals.css';
 import { AuthProvider } from '../context/AuthContext';
+import { FirestoreProvider } from '../context/FirestoreContext';
 
 function MyApp({ Component, pageProps }) {
 	return (
 		<AuthProvider>
-			<Component {...pageProps} />
+			<FirestoreProvider>
+				<Component {...pageProps} />
+			</FirestoreProvider>
 		</AuthProvider>
 	);
 }

@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import styled from 'styled-components';
-import colors from '../../styles/colors';
 import AppNav from './AppNav';
 
 // --- layout ---
@@ -9,25 +7,9 @@ export default function AppLayout({ children }) {
 	const [isNavOpen, setIsNavOpen] = useState(false);
 	// --- markup ---
 	return (
-		<Layout>
+		<div className='w-100 h-100'>
 			<AppNav />
-			<ChildrenWrap>{children}</ChildrenWrap>
-		</Layout>
+			<div className='container mx-auto'>{children}</div>
+		</div>
 	);
 }
-
-// --- styled components ---
-const Layout = styled.div`
-	min-height: 100vh;
-	width: 100vw;
-	display: flex;
-	overflow: hidden;
-`;
-
-const ChildrenWrap = styled.div`
-	display: flex;
-	min-height: 100%;
-	width: 100%;
-	flex-grow: 1;
-	flex-direction: column;
-`;

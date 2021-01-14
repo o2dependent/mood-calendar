@@ -22,10 +22,17 @@ export default function signup() {
 	// --- funcitons ---
 	const handleSubmit = async (e) => {
 		e.preventDefault();
+		// ts validation
+		const getValueFromRef = (ref) => {
+			const current = ref.current;
+			if (current) {
+				return current.value;
+			}
+		};
 		// -- variables --
-		const password: string = passwordRef?.current?.value;
-		const passwordConfirm: string = passwordConfirmRef?.current?.value;
-		const email: string = emailRef?.current?.value;
+		const password: string = getValueFromRef(passwordRef);
+		const passwordConfirm: string = getValueFromRef(passwordConfirmRef);
+		const email: string = getValueFromRef(emailRef);
 		// return if password do not meet
 		if (password !== passwordConfirm) {
 			return setError('Passwords do not match');
