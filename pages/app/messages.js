@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import AppLayout from '../../components/layout/app/AppLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useFirestore } from '../../context/FirestoreContext';
 
@@ -26,7 +27,7 @@ export default function chat() {
 	};
 
 	return (
-		<div>
+		<>
 			{error && <p>{error}</p>}
 			{messages?.map((msg) => (
 				<Message key={msg.uid} message={msg} />
@@ -34,7 +35,7 @@ export default function chat() {
 			<form onSubmit={handleSubmit}>
 				<input type='text' required ref={chatMessageRef} />
 			</form>
-		</div>
+		</>
 	);
 }
 

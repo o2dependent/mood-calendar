@@ -10,12 +10,13 @@ export function useFirestore() {
 }
 
 export function FirestoreProvider({ children }) {
+	// query setup
 	const messagesRef = firestore.collection('messages');
 	const query = messagesRef.orderBy('createdAt').limit(25);
+	// --- hooks ---
 	const [messages] = useCollectionData(query);
-
 	const { currentUser } = useAuth();
-
+	// --- functions ---
 	async function sendMessage(message) {
 		const { uid, photoURL } = currentUser;
 		await messagesRef.add({
@@ -26,7 +27,7 @@ export function FirestoreProvider({ children }) {
 		});
 		return;
 	}
-
+	// --- value for context ---
 	const value = { messages, sendMessage };
 
 	return (

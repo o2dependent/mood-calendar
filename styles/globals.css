@@ -23,13 +23,65 @@ a {
 }
 
 h1 {
-	@apply text-4xl;
+	@apply text-6xl;
+	font-family: 'Fira Sans', sans-serif;
 }
 
 h2 {
 	@apply text-2xl mb-3;
+	font-family: 'Fira Sans', sans-serif;
 }
 
 h3 {
+	@apply text-xl font-bold;
+	font-family: 'Fira Sans', sans-serif;
+}
+
+p {
 	@apply text-xl;
+	font-family: 'Montserrat', sans-serif;
+}
+
+.box-accent {
+	@apply bg-blue-900 text-white font-normal px-1 relative;
+}
+
+.box-accent::after {
+	content: '';
+	position: absolute;
+	top: -20px;
+	left: -20px;
+	background: white;
+	background-image: radial-gradient(black 1px, transparent 0);
+	background-size: 10px 10px;
+	background-repeat: repeat;
+	z-index: -1;
+	@apply w-10 h-10;
+}
+
+.nav-menu {
+	background-color: #fafafa;
+	box-shadow: 0 0 5px 5px #00000008;
+	left: -18rem;
+	transition: left var(--delay);
+	@apply pl-10 pt-9 pr-2 w-72 h-full fixed;
+}
+
+.nav-menu.open {
+	left: 0;
+}
+
+.content-wrapper {
+	--delay: 500ms ease;
+	transition: width var(--delay), margin var(--delay);
+	@apply flex flex-row flex-grow w-full;
+}
+
+.content-wrapper.open {
+	width: calc(100% - 18rem);
+	@apply ml-72;
+}
+
+.content-main {
+	@apply px-10 pt-10 w-full;
 }

@@ -57,7 +57,7 @@ export default function signup() {
 					onSubmit={handleSubmit}
 					className='flex flex-col bg-blue-100 rounded p-8 mx-auto w-5/6 shadow max-w-xl border border-blue-300'
 				>
-					<h2 className='text-center font-semibold text-3xl lg:text-4xl text-gray-800 mb-10'>
+					<h2 className='box-accent text-center w-32 mx-auto p-3 mb-10'>
 						Update Profile
 					</h2>
 					{error && (
