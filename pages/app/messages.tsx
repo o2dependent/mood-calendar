@@ -1,22 +1,33 @@
+import { Input } from 'postcss';
 import React, { useRef, useState } from 'react';
-import AppLayout from '../../components/layout/app/AppLayout';
 import { useAuth } from '../../context/AuthContext';
 import { useFirestore } from '../../context/FirestoreContext';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { getValueFromRef } from '../../helpers/getValueFromRef';
+
+interface I_Message {
+	text: string;
+	uid: string;
+}
 
 export default function chat() {
 	// --- hooks ---
 	const [error, setError] = useState('');
-	const { messages, sendMessage } = useFirestore();
+	const { sendMessage, messagesRef } = useFirestore();
 	const chatMessageRef = useRef();
 
+	// --- query ---
+	// query setup
+	const query = messagesRef.orderBy('createdAt').limit(25);
+	// get messages
+	const [messages] = useCollectionData(query);
+
 	// --- chat ---
-
-	console.log(messages);
-
+	// send message on submit
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const message = chatMessageRef.current.value;
+		const message: String = getValueFromRef(chatMessageRef);
 
 		try {
 			await sendMessage(message);
@@ -26,11 +37,12 @@ export default function chat() {
 		}
 	};
 
+	// markup
 	return (
 		<>
 			{error && <p>{error}</p>}
-			{messages?.map((msg) => (
-				<Message key={msg.uid} message={msg} />
+			{messages?.map((msg: I_Message, idx) => (
+				<Message key={msg?.uid ?? idx} message={msg} />
 			))}
 			<form onSubmit={handleSubmit}>
 				<input type='text' required ref={chatMessageRef} />

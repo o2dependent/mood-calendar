@@ -42,6 +42,10 @@ p {
 	font-family: 'Montserrat', sans-serif;
 }
 
+input {
+	@apply shadow-inner w-full bg-gray-50 p-3 rounded mb-4 outline-none;
+}
+
 .box-accent {
 	@apply bg-blue-900 text-white font-normal px-1 relative;
 }

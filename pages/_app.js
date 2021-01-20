@@ -5,6 +5,7 @@ import { FirestoreProvider } from '../context/FirestoreContext';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import AppLayout from '../components/layout/app/AppLayout';
+import WithAuth from '../components/middleware/withAuth';
 
 function MyApp({ Component, pageProps }) {
 	const router = useRouter();
@@ -21,9 +22,11 @@ function MyApp({ Component, pageProps }) {
 					/>
 				</Head>
 				{router.pathname.startsWith('/app') ? (
-					<AppLayout>
-						<Component {...pageProps} />
-					</AppLayout>
+					<WithAuth>
+						<AppLayout>
+							<Component {...pageProps} />
+						</AppLayout>
+					</WithAuth>
 				) : (
 					<Component {...pageProps} />
 				)}

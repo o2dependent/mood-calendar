@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Input from '../components/Styled/Input';
 import HomeNav from '../components/layout/home/HomeNav';
+import { getValueFromRef } from '../helpers/getValueFromRef';
 
 export default function signup() {
 	// --- hooks ---
@@ -23,16 +24,9 @@ export default function signup() {
 	// --- funcitons ---
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		// ts validation
-		const getValueFromRef = (ref) => {
-			const current = ref.current;
-			if (current) {
-				return current.value;
-			}
-		};
 		// -- variables --
-		const password: string = getValueFromRef(passwordRef);
-		const email: string = getValueFromRef(emailRef);
+		const password: String = getValueFromRef(passwordRef);
+		const email: String = getValueFromRef(emailRef);
 
 		// sign up user
 		try {

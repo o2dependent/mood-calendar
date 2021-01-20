@@ -3,6 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import WithAuth from '../components/middleware/withAuth';
+import { getValueFromRef } from '../helpers/getValueFromRef';
 
 export default function signup() {
 	// --- hooks ---
@@ -24,9 +25,9 @@ export default function signup() {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		// -- variables --
-		const password: string = passwordRef?.current?.value;
-		const passwordConfirm: string = passwordConfirmRef?.current?.value;
-		const email: string = emailRef?.current?.value;
+		const password: string = getValueFromRef(passwordRef);
+		const passwordConfirm: string = getValueFromRef(passwordConfirmRef);
+		const email: string = getValueFromRef(emailRef);
 		// return if password do not meet
 		if (password !== passwordConfirm) {
 			return setError('Passwords do not match');
