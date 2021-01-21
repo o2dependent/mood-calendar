@@ -1,23 +1,42 @@
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import Friends from './Friends';
 
-export default function AppMenu({ isMenuOpen }) {
+export default function AppMenu({ isMenuOpen, closeMenu }) {
+	// --- hooks ---
+	const [currentTab, setCurrentTab] = useState<'Recent' | 'Friends'>('Recent');
+
+	// --- functions ---
+	const renderTab = () => {
+		switch (currentTab) {
+			case 'Recent':
+				return <div></div>;
+			case 'Friends':
+				return <Friends closeMenu={closeMenu} />;
+		}
+	};
 	return (
 		<div className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
-			{[
-				{ name: 'Messages', color: 'purple' },
-				{ name: 'Friends', color: 'blue' },
-				{ name: 'Lists', color: 'red' },
-			].map((link) => (
-				<Link key={link.name} href={`/app/${link.name.toLowerCase()}`}>
-					<a className='flex justify-start items-center w-full h-9 p-1 rounded hover:bg-white'>
-						<div
-							className={`rounded-full ml-2 my-2 bg-${link.color}-500 h-4 w-4`}
-						></div>
-						<p className='ml-2 text-base'>{link.name}</p>
-					</a>
-				</Link>
-			))}
+			<div className='relative w-full md:h-9 h-12 mb-4'>
+				<div className='inbox-tab__title bg-gray-200 rounded'>
+					<p className='cursor-pointer' onClick={() => setCurrentTab('Recent')}>
+						Recent
+					</p>
+					<p
+						className='cursor-pointer'
+						onClick={() => setCurrentTab('Friends')}
+					>
+						Friends
+					</p>
+				</div>
+				<div
+					className={`inbox-tab__title ${currentTab} text-white font-medium bg-red-500 rounded`}
+				>
+					<p className='cursor-default'>Recent</p>
+					<p className='cursor-default'>Friends</p>
+				</div>
+			</div>
+			<div className='rounded overflow-hidden'>{renderTab()}</div>
 		</div>
 	);
 }

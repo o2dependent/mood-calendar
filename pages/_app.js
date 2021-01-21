@@ -9,28 +9,27 @@ import WithAuth from '../components/middleware/withAuth';
 
 function MyApp({ Component, pageProps }) {
 	const router = useRouter();
-	console.log();
 
 	return (
 		<AuthProvider>
-			<FirestoreProvider>
-				<Head>
-					<link rel='preconnect' href='https://fonts.gstatic.com' />
-					<link
-						href='https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500&family=Montserrat:wght@300;400;500&display=swap'
-						rel='stylesheet'
-					/>
-				</Head>
-				{router.pathname.startsWith('/app') ? (
+			<Head>
+				<link rel='preconnect' href='https://fonts.gstatic.com' />
+				<link
+					href='https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500&family=Montserrat:wght@300;400;500&display=swap'
+					rel='stylesheet'
+				/>
+			</Head>
+			{router.pathname.startsWith('/app') ? (
+				<FirestoreProvider>
 					<WithAuth>
 						<AppLayout>
 							<Component {...pageProps} />
 						</AppLayout>
 					</WithAuth>
-				) : (
-					<Component {...pageProps} />
-				)}
-			</FirestoreProvider>
+				</FirestoreProvider>
+			) : (
+				<Component {...pageProps} />
+			)}
 		</AuthProvider>
 	);
 }

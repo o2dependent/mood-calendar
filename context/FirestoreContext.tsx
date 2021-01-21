@@ -2,8 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { firebase } from '../helpers/firebase';
 import { useAuth } from './AuthContext';
 import { firestore } from '../helpers/firebase';
+import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
 
-const FirestoreContext = React.createContext();
+const FirestoreContext = React.createContext(null);
 
 export function useFirestore() {
 	return useContext(FirestoreContext);
@@ -12,22 +13,47 @@ export function useFirestore() {
 export function FirestoreProvider({ children }) {
 	// --- hooks ---
 	const { currentUser } = useAuth();
+	const [friends, setFriends] = useState([]);
+	const [pendingRequests, setPendingRequests] = useState([]);
+	const [sentRequests, setSentRequests] = useState([]);
 
 	// --- collection refs ---
 	const messagesRef = firestore.collection('messages');
 	const friendsRef = firestore.collection('friends');
 
+	// get friends
+	const query: object = friendsRef.doc(currentUser.email);
+	const [friendsRes] = useDocument(query);
+	useEffect(() => {
+		setFriends(friendsRes?.data()?.friends ?? []);
+		setPendingRequests(friendsRes?.data()?.pending ?? []);
+		setSentRequests(friendsRes?.data()?.sent ?? []);
+	}, [friendsRes]);
+
 	// --- functions ---
 	// TODO: Update send message with friend display name or email
-	async function sendMessage(message) {
-		const { photoURL } = currentUser;
-		await messagesRef.add({
-			text: message,
-			createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+	async function sendMessage(text, docName) {
+		const message = {
+			text: text,
 			email: currentUser.email,
-			photoURL,
-		});
-		return;
+			createdAt: new Date(),
+		};
+		try {
+			await messagesRef.doc(docName).update({
+				messages: firebase.firestore.FieldValue.arrayUnion(message),
+			});
+			return;
+		} catch (err) {
+			console.error(err);
+			try {
+				await messagesRef.doc(docName).set({
+					messages: firebase.firestore.FieldValue.arrayUnion(message),
+				});
+				return;
+			} catch (err) {
+				console.error(err);
+			}
+		}
 	}
 	// TODO: Update add user to adding user via display name or email
 	// send a friend request
@@ -102,10 +128,12 @@ export function FirestoreProvider({ children }) {
 		sendMessage,
 		sendFriendRequest,
 		messagesRef,
-		friendsRef,
 		acceptFriendRequest,
 		declineFriendRequest,
 		removeFriend,
+		friends,
+		pendingRequests,
+		sentRequests,
 	};
 
 	// markup

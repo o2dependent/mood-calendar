@@ -37,6 +37,11 @@ h3 {
 	font-family: 'Fira Sans', sans-serif;
 }
 
+h4 {
+	@apply text-lg font-medium;
+	font-family: 'Fira Sans', sans-serif;
+}
+
 p {
 	@apply text-xl;
 	font-family: 'Montserrat', sans-serif;
@@ -64,28 +69,68 @@ input {
 }
 
 .nav-menu {
+	z-index: 1;
 	background-color: #fafafa;
-	box-shadow: 0 0 5px 5px #00000008;
-	left: -18rem;
+	box-shadow: 0 0 10px 1px #00000012;
 	transition: left var(--delay);
-	@apply pl-10 pt-9 pr-2 w-72 h-full fixed;
+	@apply md:pl-10 md:pt-9 md:pr-2 md:w-80 md:-left-80 -left-full px-2 pt-4 w-full h-full fixed;
 }
 
 .nav-menu.open {
-	left: 0;
+	@apply left-0;
 }
 
 .content-wrapper {
 	--delay: 500ms ease;
 	transition: width var(--delay), margin var(--delay);
-	@apply flex flex-row flex-grow w-full;
+	@apply flex flex-row flex-grow w-full relative;
 }
-
-.content-wrapper.open {
-	width: calc(100% - 18rem);
-	@apply ml-72;
+@media screen and (min-width: 768px) {
+	.content-wrapper.open {
+		width: calc(100% - 20rem);
+		@apply ml-80 px-10;
+	}
 }
 
 .content-main {
-	@apply px-10 pt-10 w-full;
+	@apply px-2 pt-10 w-full;
+}
+
+.inbox-tab {
+	--delay: 500ms ease;
+	top: 0;
+	transition: left var(--delay);
+	box-shadow: 0 0 5px 5px #00000008;
+	background-color: #ffffff;
+	@apply absolute h-full md:w-72 w-full md:px-4 px-2 md:pt-9 pt-6 md:-left-72 -left-full;
+}
+
+.inbox-tab.open {
+	@apply left-0;
+}
+
+.inbox-main {
+	width: 100%;
+	margin-left: auto;
+	transition: width var(--delay);
+}
+
+@media screen and (min-width: 768px) {
+	.inbox-main.open {
+		width: calc(100% - 18rem);
+	}
+}
+
+.inbox-tab__title {
+	--delay: 500ms ease;
+	transition: clip-path var(--delay);
+	@apply w-full grid h-full grid-cols-2 text-center md:py-1 py-2.5 absolute;
+}
+
+.inbox-tab__title.Recent {
+	clip-path: polygon(0% 100%, 50% 100%, 50% 0%, 0 0%);
+}
+
+.inbox-tab__title.Friends {
+	clip-path: polygon(50% 100%, 100% 100%, 100% 0%, 50% 0%);
 }

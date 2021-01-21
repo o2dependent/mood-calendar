@@ -18,8 +18,8 @@ export default function AppNav({ toggleMenu }) {
 	};
 
 	return (
-		<div className='bg-red-500 w-full h-11'>
-			<nav className='mx-10 w-100 h-full flex justify-between items-center'>
+		<div className='bg-red-500 w-full h-11 z-50'>
+			<nav className='md:mx-10 mx-2 w-100 h-full flex justify-between items-center'>
 				<div
 					className='h-full flex justify-center items-center cursor-pointer'
 					onClick={toggleMenu}
@@ -31,7 +31,7 @@ export default function AppNav({ toggleMenu }) {
 					</svg>
 				</div>
 				<div className='text-white flex'>
-					<span className='ml-auto'>{currentUser.email}</span>
+					<span className='md:inline hidden ml-auto'>{currentUser.email}</span>
 					<div className='rounded-full ml-1.5 h-7 w-7 overflow-hidden border-2 text-center bg-blue-500 bg-opacity-50 border-white flex items-center justify-center'>
 						{currentUser.photoURL ? (
 							<img src={currentUser.photoURL} />
