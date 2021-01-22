@@ -1,3 +1,3 @@
-export default function formatEmail(email: String): String {
+export default function formatEmail(email: string): string {
 	return email.replace('-', '--').replace('.', '-');
 }
