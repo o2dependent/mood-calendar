@@ -60,12 +60,9 @@ export function FirestoreProvider({ children }) {
 	async function sendFriendRequest(friendEmail) {
 		await friendsRef
 			.doc(friendEmail)
-			.update(
-				{
-					pending: firebase.firestore.FieldValue.arrayUnion(currentUser.email),
-				},
-				{ merge: true }
-			)
+			.update({
+				pending: firebase.firestore.FieldValue.arrayUnion(currentUser.email),
+			})
 			.then(
 				async () =>
 					await friendsRef
