@@ -48,7 +48,7 @@ p {
 }
 
 input {
-	@apply shadow-inner w-full bg-gray-50 p-3 rounded mb-4 outline-none;
+	@apply shadow-inner w-full bg-gray-50 p-2 rounded mb-4 outline-none;
 }
 
 .box-accent {

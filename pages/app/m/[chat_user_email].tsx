@@ -52,8 +52,13 @@ export default function chat() {
 	return (
 		<div className='flex flex-col justify-end h-full'>
 			{messages?.length > 0 && messages.map((msg) => <Message msg={msg} />)}
-			<form onSubmit={handleSubmit}>
-				<input type='text' required ref={chatMessageRef} />
+			<form onSubmit={handleSubmit} className='h-12'>
+				<input
+					className='fixed bottom-1 left-0 md:static mb-0'
+					type='text'
+					required
+					ref={chatMessageRef}
+				/>
 			</form>
 		</div>
 	);
