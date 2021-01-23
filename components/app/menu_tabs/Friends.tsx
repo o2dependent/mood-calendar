@@ -59,34 +59,38 @@ export default function Friends({ closeMenu }) {
 				</div>
 			)}
 			{sentRequests.length > 0 && (
-				<div>
+				<div className='rounded overflow-hidden'>
 					<h4>Sent</h4>
-					{sentRequests.map((friend) => (
-						<div
-							key={friend}
-							className='flex items-center bg-gray-200 h-10 w-full p-2'
-						>
-							<p className='text-base'>{friend}</p>
-						</div>
-					))}
+					<div className='rounded overflow-hidden'>
+						{sentRequests.map((friend) => (
+							<div
+								key={friend}
+								className='flex items-center bg-gray-200 h-10 w-full p-2'
+							>
+								<p className='text-base'>{friend}</p>
+							</div>
+						))}
+					</div>
 				</div>
 			)}
 
 			<div>
 				<h4>Friends</h4>
-				{friends &&
-					friends.map((friend) => (
-						<Link href={`/app/m/${friend}`}>
-							<a
-								onClick={closeMenu}
-								key={friend}
-								className='flex items-center rounded bg-gray-200 h-14 w-full p-2'
-							>
-								<p className='h-'>{friend}</p>
-								{/* <button onClick={() => removeFriend(friend)}>Remove</button> */}
-							</a>
-						</Link>
-					))}
+				<div className='rounded overflow-hidden'>
+					{friends &&
+						friends.map((friend) => (
+							<Link href={`/app/m/${friend}`}>
+								<a
+									onClick={closeMenu}
+									key={friend}
+									className='flex items-center bg-gray-200 h-14 w-full p-2'
+								>
+									<p className=''>{friend}</p>
+									{/* <button onClick={() => removeFriend(friend)}>Remove</button> */}
+								</a>
+							</Link>
+						))}
+				</div>
 			</div>
 			<form onSubmit={handleSubmit}>
 				<input type='text' required ref={newFriendRef} />

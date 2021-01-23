@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDocument } from 'react-firebase-hooks/firestore';
+import { useDocument, useDocumentData } from 'react-firebase-hooks/firestore';
 import { useAuth } from '../../../context/AuthContext';
 import { useFirestore } from '../../../context/FirestoreContext';
 import { getValueFromRef } from '../../../helpers/getValueFromRef';
@@ -10,6 +10,10 @@ interface I_Message {
 	text: string;
 	sender: string;
 	createdAt: any;
+}
+
+interface I_MessageRes {
+	messages: I_Message[];
 }
 
 export default function chat() {
@@ -23,10 +27,10 @@ export default function chat() {
 	const chatMessageRef = useRef();
 
 	// --- query ---
-	const query: object = messagesRef.doc(docName);
-	const [messagesRes] = useDocument(query);
+	const query = messagesRef.doc(docName);
+	const [messagesRes] = useDocumentData<I_MessageRes>(query);
 	useEffect(() => {
-		const newMessages = messagesRes?.data()?.messages;
+		const newMessages = messagesRes?.messages;
 		setMessages(newMessages);
 	}, [messagesRes]);
 

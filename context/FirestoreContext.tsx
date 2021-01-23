@@ -2,7 +2,21 @@ import React, { useContext, useEffect, useState } from 'react';
 import { firebase } from '../helpers/firebase';
 import { useAuth } from './AuthContext';
 import { firestore } from '../helpers/firebase';
-import { useCollectionData, useDocument } from 'react-firebase-hooks/firestore';
+import {
+	useCollection,
+	useCollectionData,
+	useDocument,
+	useDocumentData,
+	useDocumentOnce,
+} from 'react-firebase-hooks/firestore';
+
+// TODO: when editing the friends list schema change this to maintain strong typing
+export type I_User = string;
+interface I_FriendRes {
+	friends: I_User[];
+	pending: I_User[];
+	sent: I_User[];
+}
 
 const FirestoreContext = React.createContext(null);
 
@@ -13,26 +27,37 @@ export function useFirestore() {
 export function FirestoreProvider({ children }) {
 	// --- hooks ---
 	const { currentUser } = useAuth();
-	const [friends, setFriends] = useState([]);
+	const [friends, setFriends] = useState<I_User[]>([]);
 	const [pendingRequests, setPendingRequests] = useState([]);
 	const [sentRequests, setSentRequests] = useState([]);
 
 	// --- collection refs ---
 	const messagesRef = firestore.collection('messages');
 	const friendsRef = firestore.collection('friends');
+	const listsDisplayRef = firestore.collection('lists_display');
+	const listsRef = firestore.collection('lists');
 
 	// get friends
-	const query: object = friendsRef.doc(currentUser.email);
-	const [friendsRes] = useDocument(query);
+	const friendsQuery = friendsRef.doc(currentUser.email);
+	const [friendsRes] = useDocumentData<I_FriendRes>(friendsQuery);
 	useEffect(() => {
-		setFriends(friendsRes?.data()?.friends ?? []);
-		setPendingRequests(friendsRes?.data()?.pending ?? []);
-		setSentRequests(friendsRes?.data()?.sent ?? []);
+		setFriends(friendsRes?.friends ?? []);
+		setPendingRequests(friendsRes?.pending ?? []);
+		setSentRequests(friendsRes?.sent ?? []);
 	}, [friendsRes]);
+
+	// get user's lists TODO: migrate to cleaner user implementations to reduce document calls
+	const listsDisplayQuery = listsDisplayRef.where(
+		'users',
+		'array-contains',
+		currentUser.email
+	);
+	const [lists] = useCollectionData(listsDisplayQuery);
+	console.log(lists);
 
 	// --- functions ---
 	// TODO: Update send message with friend display name or email
-	async function sendMessage(text, docName) {
+	async function sendMessage(text: string, docName: string) {
 		const message = {
 			text: text,
 			email: currentUser.email,
@@ -57,7 +82,7 @@ export function FirestoreProvider({ children }) {
 	}
 	// TODO: Update add user to adding user via display name or email
 	// send a friend request
-	async function sendFriendRequest(friendEmail) {
+	async function sendFriendRequest(friendEmail: string) {
 		await friendsRef
 			.doc(friendEmail)
 			.update({
@@ -80,7 +105,7 @@ export function FirestoreProvider({ children }) {
 		return;
 	}
 	// accept friend request
-	async function acceptFriendRequest(friendEmail) {
+	async function acceptFriendRequest(friendEmail: string) {
 		try {
 			await friendsRef.doc(friendEmail).update({
 				friends: firebase.firestore.FieldValue.arrayUnion(currentUser.email),
@@ -95,7 +120,7 @@ export function FirestoreProvider({ children }) {
 		}
 	}
 	// decline friend request
-	async function declineFriendRequest(friendEmail) {
+	async function declineFriendRequest(friendEmail: string) {
 		try {
 			await friendsRef.doc(friendEmail).update({
 				sent: firebase.firestore.FieldValue.arrayRemove(currentUser.email),
@@ -108,7 +133,7 @@ export function FirestoreProvider({ children }) {
 		}
 	}
 	// remove friend
-	async function removeFriend(friendEmail) {
+	async function removeFriend(friendEmail: string) {
 		try {
 			await friendsRef.doc(friendEmail).update({
 				friends: firebase.firestore.FieldValue.arrayRemove(currentUser.email),
@@ -131,6 +156,8 @@ export function FirestoreProvider({ children }) {
 		friends,
 		pendingRequests,
 		sentRequests,
+		lists,
+		listsRef,
 	};
 
 	// markup
