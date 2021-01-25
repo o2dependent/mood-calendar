@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import { useDocument, useDocumentData } from 'react-firebase-hooks/firestore';
+import { useDocumentData } from 'react-firebase-hooks/firestore';
 import { useAuth } from '../../../context/AuthContext';
 import { useFirestore } from '../../../context/FirestoreContext';
 import { getValueFromRef } from '../../../helpers/getValueFromRef';
