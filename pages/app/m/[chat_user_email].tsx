@@ -75,10 +75,7 @@ function Message({ msg }) {
 
 	return (
 		<div className={`mb-2 max-w-10/12 h-auto ${containerClass}`}>
-			<p
-				className={`rounded p-2 inline-block w-auto ${messageClass}`}
-				// style={{ width: 'fit-content' }}
-			>
+			<p className={`rounded p-2 inline-block w-auto ${messageClass}`}>
 				{text}
 			</p>
 		</div>

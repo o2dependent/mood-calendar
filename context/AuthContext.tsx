@@ -8,7 +8,8 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }) {
-	const [currentUser, setCurrentUser] = useState();
+	// TODO: find firebase user type
+	const [currentUser, setCurrentUser] = useState<any>();
 	const [loading, setLoading] = useState(true);
 
 	function signup(email: string, password: string) {
@@ -23,15 +24,15 @@ export function AuthProvider({ children }) {
 		return auth.signOut();
 	}
 
-	function resetPassword(email) {
+	function resetPassword(email: string) {
 		return auth.sendPasswordResetEmail(email);
 	}
 
-	function updateEmail(email) {
+	function updateEmail(email: string) {
 		return currentUser.updateEmail(email);
 	}
 
-	function updatePassword(password) {
+	function updatePassword(password: string) {
 		return currentUser.updatePassword(password);
 	}
 
