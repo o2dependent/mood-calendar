@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
-import { useCollection } from 'react-firebase-hooks/firestore';
+import { useCollection, useDocumentData } from 'react-firebase-hooks/firestore';
 import { I_User, useFirestore } from '../../../context/FirestoreContext';
 import { getValueFromRef } from '../../../helpers/getValueFromRef';
 import resetRefValue from '../../../helpers/resetRefValue';
@@ -10,72 +10,95 @@ interface I_ListItem {
 	text: string;
 }
 
-interface I_List {
-	items: I_ListItem[];
+interface I_ListRes {
 	title: string;
-	users: I_User[];
+	users: string[];
+	sections: string[];
 }
 
 export default function list_uid() {
 	// --- hooks ---
-	const [todos, setTodos] = useState([]);
+	const [sections, setSections] = useState<object>({});
+	const [sectionInput, setSectionInput] = useState({});
+	console.log(sectionInput);
 	const addTodoRef = useRef(null);
 	// get list_uid from page query
 	const router = useRouter();
 	const { doc_uid } = router.query;
 	// get listRef from firestore
-	const { todosRef, toggleTodoCompleted, addNewTodo } = useFirestore();
+	const { listsDisplayRef, toggleTodoCompleted, addNewTodo } = useFirestore();
 	// --- firestore ---
+	// make query for current list document
+	const listQuery = listsDisplayRef.doc(doc_uid);
+	// subscribe user to snapshot of list disply
+	const [listRes] = useDocumentData<I_ListRes>(listQuery);
 	// make query for document with list_uid
-	const query = todosRef.where('listId', '==', doc_uid);
+	const todosQuery = listsDisplayRef.doc(doc_uid).collection('todos');
 	// subscribe user to snapshot of this list document
-	const [todosRes] = useCollection(query);
+	const [todosRes] = useCollection(todosQuery);
 	useEffect(() => {
-		const newTodos = todosRes?.docs?.map((doc) => ({
+		const newTodosRes = todosRes?.docs?.map((doc) => ({
 			id: doc?.id,
 			...doc?.data(),
 		}));
-		setTodos(newTodos);
-	}, [todosRes]);
-
-	console.log(todos);
+		let newTodos = {};
+		listRes?.sections?.forEach((section) => (newTodos[section] = []));
+		newTodosRes?.forEach((todo) => newTodos[todo?.section]?.push(todo));
+		setSections(newTodos);
+	}, [todosRes, listRes]);
 
 	// handle sumbit of adding new todo
-	function handleAddNewTodo(e) {
-		e.preventDefault();
+	function handleAddNewTodo(section) {
 		// get and reset ref value
-		const text = getValueFromRef(addTodoRef);
-		resetRefValue(addNewTodo);
+		const text = sectionInput[section];
+		setSectionInput({ ...sectionInput, [section]: '' });
 		// create new todo
-		addNewTodo(doc_uid, text);
+		addNewTodo(doc_uid, text, section);
 	}
-
 	return (
 		<div>
-			{todos?.length > 0 &&
-				todos?.map((todo) => (
-					<div className='bg-white' key={todo.text}>
+			{Object?.keys(sections)?.map((section) => (
+				<div className='flex flex-col gap-2'>
+					<h3>{section}</h3>
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+							handleAddNewTodo(section);
+						}}
+					>
+						<input
+							type='text'
+							value={sectionInput[section]}
+							onChange={(e) =>
+								setSectionInput({ ...sectionInput, [section]: e.target.value })
+							}
+						/>
+						<button type='submit'>Add new todo</button>
+					</form>
+					{sections[section]?.map((todo) => (
 						<button
-							className='h-5 w-5 rounded-full border-white border-2 overflow-hidden ring-opacity-100 ring-2 focus:ring-4 focus:outline-none'
-							onClick={() => toggleTodoCompleted(todo.id, todo.completed)}
+							className=' flex w-full gap-2 items-center p-2 rounded bg-blue-50 focus:ring-4 ring-blue-200 focus:outline-none'
+							onClick={() =>
+								toggleTodoCompleted(doc_uid, todo.id, todo.completed)
+							}
+							key={todo.text}
 						>
-							<div
-								className='h-full w-full  bg-blue-500'
-								style={{
-									clipPath: todo.completed
-										? 'ellipse(100% 100% at 50% 50%)'
-										: 'ellipse(0% 0% at 50% 50%)',
-									transition: 'clip-path 500ms ease',
-								}}
-							></div>
+							<div className='h-5 w-5 rounded-full border-transparent border-2 overflow-hidden ring-opacity-100 ring-2'>
+								<div
+									className='h-full w-full  bg-blue-500'
+									style={{
+										clipPath: todo.completed
+											? 'ellipse(100% 100% at 50% 50%)'
+											: 'ellipse(0% 0% at 50% 50%)',
+										transition: 'clip-path 500ms ease-in-out',
+									}}
+								></div>
+							</div>
+							<p>{todo?.text}</p>
 						</button>
-						<p>{todo?.text}</p>
-					</div>
-				))}
-			<form onSubmit={handleAddNewTodo}>
-				<input type='text' ref={addTodoRef} />
-				<button type='submit'>Add new todo</button>
-			</form>
+					))}
+				</div>
+			))}
 		</div>
 	);
 }

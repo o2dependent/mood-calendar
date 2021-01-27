@@ -155,19 +155,27 @@ export function FirestoreProvider({ children }) {
 		}
 	}
 	// toggle todos completed
-	async function toggleTodoCompleted(todoId: string, todoCurState: boolean) {
+	async function toggleTodoCompleted(
+		listId: string,
+		todoId: string,
+		todoCurState: boolean
+	) {
 		try {
-			await todosRef.doc(todoId).update({ completed: !todoCurState });
+			await listsDisplayRef
+				.doc(listId)
+				.collection('todos')
+				.doc(todoId)
+				.update({ completed: !todoCurState });
 		} catch (err) {
 			console.error(err);
 		}
 	}
 	// create todo
-	async function addNewTodo(listId: string, text: string) {
+	async function addNewTodo(listId: string, text: string, section: string) {
 		try {
-			await todosRef.add({
-				listId,
+			await listsDisplayRef.doc(listId).collection('todos').add({
 				text,
+				section,
 				completed: false,
 			});
 		} catch (err) {
@@ -190,6 +198,7 @@ export function FirestoreProvider({ children }) {
 		pendingRequests,
 		sentRequests,
 		lists,
+		listsDisplayRef,
 	};
 
 	// markup
