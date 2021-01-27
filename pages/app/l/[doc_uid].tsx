@@ -54,11 +54,20 @@ export default function list_uid() {
 		<div>
 			{todos?.length > 0 &&
 				todos?.map((todo) => (
-					<div className='bg-green-300'>
+					<div className='bg-white' key={todo.text}>
 						<button
+							className='h-5 w-5 rounded-full border-white border-2 overflow-hidden ring-opacity-100 ring-2 focus:ring-4 focus:outline-none'
 							onClick={() => toggleTodoCompleted(todo.id, todo.completed)}
 						>
-							{todo?.completed ? 'completed' : 'not completed'}
+							<div
+								className='h-full w-full  bg-blue-500'
+								style={{
+									clipPath: todo.completed
+										? 'ellipse(100% 100% at 50% 50%)'
+										: 'ellipse(0% 0% at 50% 50%)',
+									transition: 'clip-path 500ms ease',
+								}}
+							></div>
 						</button>
 						<p>{todo?.text}</p>
 					</div>
