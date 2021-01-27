@@ -10,10 +10,9 @@ export default function Lists({ closeMenu }) {
 		<div>
 			{lists?.length > 0 &&
 				lists.map((list) => (
-					<Link href={`/app/l/${list.doc_id}`}>
+					<Link href={`/app/l/${list.id}`} key={list.id}>
 						<a
 							onClick={closeMenu}
-							key={list.title}
 							className='flex items-center bg-gray-200 h-14 w-full p-2'
 						>
 							<p className=''>{list.title}</p>

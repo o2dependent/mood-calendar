@@ -38,7 +38,7 @@ export default function chat() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		const message: String = getValueFromRef(chatMessageRef);
+		const message: string = getValueFromRef(chatMessageRef);
 		resetRefValue(chatMessageRef);
 
 		try {

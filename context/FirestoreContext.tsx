@@ -30,12 +30,14 @@ export function FirestoreProvider({ children }) {
 	const [friends, setFriends] = useState<I_User[]>([]);
 	const [pendingRequests, setPendingRequests] = useState([]);
 	const [sentRequests, setSentRequests] = useState([]);
+	const [lists, setLists] = useState([]);
 
 	// --- collection refs ---
 	const messagesRef = firestore.collection('messages');
 	const friendsRef = firestore.collection('friends');
 	const listsDisplayRef = firestore.collection('lists_display');
 	const listsRef = firestore.collection('lists');
+	const todosRef = firestore.collection('todos');
 
 	// get friends
 	const friendsQuery = friendsRef.doc(currentUser.email);
@@ -52,8 +54,15 @@ export function FirestoreProvider({ children }) {
 		'array-contains',
 		currentUser.email
 	);
-	const [lists] = useCollectionData(listsDisplayQuery);
-	console.log(lists);
+	const [listsRes] = useCollection(listsDisplayQuery);
+
+	useEffect(() => {
+		const newLists = listsRes?.docs?.map((doc) => ({
+			id: doc?.id,
+			...doc?.data(),
+		}));
+		setLists(newLists);
+	}, [listsRes]);
 
 	// --- functions ---
 	// TODO: Update send message with friend display name or email
@@ -145,19 +154,42 @@ export function FirestoreProvider({ children }) {
 			console.error(err);
 		}
 	}
+	// toggle todos completed
+	async function toggleTodoCompleted(todoId: string, todoCurState: boolean) {
+		try {
+			await todosRef.doc(todoId).update({ completed: !todoCurState });
+		} catch (err) {
+			console.error(err);
+		}
+	}
+	// create todo
+	async function addNewTodo(listId: string, text: string) {
+		try {
+			await todosRef.add({
+				listId,
+				text,
+				completed: false,
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	}
 	// --- value for context ---
 	const value = {
+		messagesRef,
+		listsRef,
+		todosRef,
 		sendMessage,
 		sendFriendRequest,
-		messagesRef,
 		acceptFriendRequest,
 		declineFriendRequest,
 		removeFriend,
+		toggleTodoCompleted,
+		addNewTodo,
 		friends,
 		pendingRequests,
 		sentRequests,
 		lists,
-		listsRef,
 	};
 
 	// markup
