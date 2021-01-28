@@ -154,6 +154,18 @@ export function FirestoreProvider({ children }) {
 			console.error(err);
 		}
 	}
+	// add new list
+	async function addNewList(title: string) {
+		try {
+			await listsDisplayRef.add({
+				title,
+				users: [currentUser.email],
+				sections: [],
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	}
 	// toggle todos completed
 	async function toggleTodoCompleted(
 		listId: string,
@@ -182,6 +194,38 @@ export function FirestoreProvider({ children }) {
 			console.error(err);
 		}
 	}
+	// delete todo
+	async function deleteTodo(listId: string, todoId: string) {
+		try {
+			await listsDisplayRef
+				.doc(listId)
+				.collection('todos')
+				.doc(todoId)
+				.delete();
+		} catch (err) {
+			console.error(err);
+		}
+	}
+	// add new section to list
+	async function addNewSection(listId: string, section: string) {
+		try {
+			await listsDisplayRef.doc(listId).update({
+				sections: firebase.firestore.FieldValue.arrayUnion(section),
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	}
+	// delte section
+	async function deleteSection(listId: string, section: string) {
+		try {
+			await listsDisplayRef.doc(listId).update({
+				sections: firebase.firestore.FieldValue.arrayRemove(section),
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	}
 	// --- value for context ---
 	const value = {
 		messagesRef,
@@ -193,7 +237,11 @@ export function FirestoreProvider({ children }) {
 		declineFriendRequest,
 		removeFriend,
 		toggleTodoCompleted,
+		deleteTodo,
 		addNewTodo,
+		addNewSection,
+		addNewList,
+		deleteSection,
 		friends,
 		pendingRequests,
 		sentRequests,

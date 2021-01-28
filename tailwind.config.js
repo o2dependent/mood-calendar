@@ -18,6 +18,10 @@ module.exports = {
 				},
 			},
 		},
+		minWidth: {
+			'3/4': '75%',
+			'9/10': '90%',
+		},
 	},
 	variants: {
 		extend: {},

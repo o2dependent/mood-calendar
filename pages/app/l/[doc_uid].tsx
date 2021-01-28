@@ -8,6 +8,7 @@ import resetRefValue from '../../../helpers/resetRefValue';
 interface I_ListItem {
 	completed: boolean;
 	text: string;
+	section: string;
 }
 
 interface I_ListRes {
@@ -20,13 +21,19 @@ export default function list_uid() {
 	// --- hooks ---
 	const [sections, setSections] = useState<object>({});
 	const [sectionInput, setSectionInput] = useState({});
-	console.log(sectionInput);
-	const addTodoRef = useRef(null);
+	const newSectionRef = useRef(null);
 	// get list_uid from page query
 	const router = useRouter();
 	const { doc_uid } = router.query;
 	// get listRef from firestore
-	const { listsDisplayRef, toggleTodoCompleted, addNewTodo } = useFirestore();
+	const {
+		listsDisplayRef,
+		toggleTodoCompleted,
+		deleteSection,
+		addNewTodo,
+		addNewSection,
+		deleteTodo,
+	} = useFirestore();
 	// --- firestore ---
 	// make query for current list document
 	const listQuery = listsDisplayRef.doc(doc_uid);
@@ -44,6 +51,12 @@ export default function list_uid() {
 		let newTodos = {};
 		listRes?.sections?.forEach((section) => (newTodos[section] = []));
 		newTodosRes?.forEach((todo) => newTodos[todo?.section]?.push(todo));
+		Object.keys(newTodos).forEach((section) => {
+			newTodos[section].sort(function (x, y) {
+				// false values first
+				return x.completed - y.completed;
+			});
+		});
 		setSections(newTodos);
 	}, [todosRes, listRes]);
 
@@ -55,10 +68,26 @@ export default function list_uid() {
 		// create new todo
 		addNewTodo(doc_uid, text, section);
 	}
+
+	// handle submit of aqdding new section
+	function handleAddNewSection(e) {
+		e.preventDefault();
+		// get value and reset ref
+		const section = getValueFromRef(newSectionRef);
+		resetRefValue(newSectionRef);
+		// create new section
+		addNewSection(doc_uid, section);
+	}
+	// handle toggling or deleting todo
+	function handleTodoClick(todoId: string, todoCompleted: boolean) {
+		// if list setting is to delete else toggle
+		deleteTodo(doc_uid, todoId);
+		// toggleTodoCompleted(doc_uid, todoId, todoCompleted)
+	}
 	return (
-		<div>
+		<div className='h-full flex flex-nowrap overflow-x-auto gap-2'>
 			{Object?.keys(sections)?.map((section) => (
-				<div className='flex flex-col gap-2'>
+				<div className='inline-flex min-w-9/10 flex-col gap-2' key={section}>
 					<h3>{section}</h3>
 					<form
 						onSubmit={(e) => {
@@ -67,6 +96,7 @@ export default function list_uid() {
 						}}
 					>
 						<input
+							placeholder={`Add item to ${section}`}
 							type='text'
 							value={sectionInput[section]}
 							onChange={(e) =>
@@ -75,13 +105,21 @@ export default function list_uid() {
 						/>
 						<button type='submit'>Add new todo</button>
 					</form>
+					{sections[section]?.length === 0 && (
+						<button onClick={() => deleteSection(doc_uid, section)}>
+							Delete section
+						</button>
+					)}
 					{sections[section]?.map((todo) => (
 						<button
-							className=' flex w-full gap-2 items-center p-2 rounded bg-blue-50 focus:ring-4 ring-blue-200 focus:outline-none'
-							onClick={() =>
-								toggleTodoCompleted(doc_uid, todo.id, todo.completed)
-							}
 							key={todo.text}
+							className='grid w-full gap-2 items-center p-2 rounded focus:ring-4 ring-blue-200 focus:outline-none'
+							style={{
+								gridTemplateColumns: '1.25rem 1fr',
+								boxShadow: '2px 2px 5px #b5b5b5, -2px -2px 5px #ffffff',
+								background: 'linear-gradient(145deg, #ffffff, #fafafa)',
+							}}
+							onClick={() => handleTodoClick(todo.id, todo.completed)}
 						>
 							<div className='h-5 w-5 rounded-full border-transparent border-2 overflow-hidden ring-opacity-100 ring-2'>
 								<div
@@ -94,11 +132,22 @@ export default function list_uid() {
 									}}
 								></div>
 							</div>
-							<p>{todo?.text}</p>
+							<p className='text-left'>{todo?.text}</p>
 						</button>
 					))}
 				</div>
 			))}
+			<form
+				className='inline-flex min-w-9/10 flex-col gap-2'
+				onSubmit={handleAddNewSection}
+			>
+				<input
+					placeholder='Add a new section'
+					type='text'
+					ref={newSectionRef}
+				/>
+				<button type='submit'>Add new section</button>
+			</form>
 		</div>
 	);
 }
