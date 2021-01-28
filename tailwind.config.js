@@ -1,12 +1,19 @@
 module.exports = {
+	darkMode: 'media',
+	darkMode: 'class',
 	purge: [
 		'./pages/**/*.js',
 		'./components/**/*.js',
 		'./pages/**/*.tsx',
 		'./components/**/*.tsx',
 	],
-	darkMode: false, // or 'media' or 'class'
 	theme: {
+		boxShadow: {
+			md:
+				// document.body.classList.contains('dark')?
+				'hsl(215 28% 9% / 1) 2px 2px 5px, hsl(215 28% 25% / 1) -2px -2px 5px',
+			// : '2px 2px 5px #b5b5b5, -2px -2px 5px #ffffff',
+		},
 		extend: {
 			colors: {
 				red: {

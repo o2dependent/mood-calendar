@@ -15,7 +15,9 @@ export default function AppLayout({ children }) {
 					isMenuOpen={isMenuOpen}
 					closeMenu={() => setIsMenuOpen(false)}
 				/>
-				<div className='content-main'>{children}</div>
+				<div className='content-main dark:text-white dark:bg-gray-800'>
+					{children}
+				</div>
 			</div>
 		</div>
 	);

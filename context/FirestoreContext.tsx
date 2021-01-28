@@ -226,6 +226,16 @@ export function FirestoreProvider({ children }) {
 			console.error(err);
 		}
 	}
+	// add friend to list
+	async function addFriendToList(listId: string, friendEmail: string) {
+		try {
+			await listsDisplayRef.doc(listId).update({
+				users: firebase.firestore.FieldValue.arrayUnion(friendEmail),
+			});
+		} catch (err) {
+			console.error(err);
+		}
+	}
 	// --- value for context ---
 	const value = {
 		messagesRef,
@@ -242,6 +252,7 @@ export function FirestoreProvider({ children }) {
 		addNewSection,
 		addNewList,
 		deleteSection,
+		addFriendToList,
 		friends,
 		pendingRequests,
 		sentRequests,

@@ -92,7 +92,7 @@ input {
 }
 
 .content-main {
-	@apply px-2 pt-10 w-full;
+	@apply pt-10 w-full;
 }
 
 .inbox-tab__title {
