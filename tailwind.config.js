@@ -8,13 +8,13 @@ module.exports = {
 		'./components/**/*.tsx',
 	],
 	theme: {
-		boxShadow: {
-			md:
-				// document.body.classList.contains('dark')?
-				'hsl(215 28% 9% / 1) 2px 2px 5px, hsl(215 28% 25% / 1) -2px -2px 5px',
-			// : '2px 2px 5px #b5b5b5, -2px -2px 5px #ffffff',
-		},
 		extend: {
+			boxShadow: {
+				md:
+					// document.body.classList.contains('dark')?
+					'hsl(215 28% 9% / 1) 2px 2px 5px, hsl(215 28% 25% / 1) -2px -2px 5px',
+				// : '2px 2px 5px #b5b5b5, -2px -2px 5px #ffffff',
+			},
 			colors: {
 				red: {
 					500: '#FD3A69',
