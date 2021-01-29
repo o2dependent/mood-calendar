@@ -1,3 +1,4 @@
+import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { useCollection, useDocumentData } from 'react-firebase-hooks/firestore';
@@ -81,8 +82,31 @@ export default function list_uid() {
 		deleteTodo(doc_uid, todoId);
 		// toggleTodoCompleted(doc_uid, todoId, todoCompleted)
 	}
-	document.body.setAttribute('class', 'dark');
-	console.log(document.body.classList.contains('dark'));
+	// --- framer motion variants ---
+	const todoVariant = {
+		initial: {
+			opacity: 0,
+		},
+		animate: {
+			duration: 1,
+			opacity: 1,
+		},
+	};
+	const sectionVariant = {
+		initial: {
+			opacity: 0,
+			transition: {
+				staggerChildren: 5,
+			},
+		},
+		animate: {
+			opacity: 1,
+			transition: {
+				duration: 1,
+				staggerChildren: 5,
+			},
+		},
+	};
 	return (
 		<div className='flex flex-col flex-grow overflow-hidden'>
 			<div className='px-2'>
@@ -107,10 +131,13 @@ export default function list_uid() {
 						})}
 				</div>
 			)}
-			<div className='h-full flex-grow flex flex-nowrap overflow-x-scroll gap-2 px-2'>
+			<div className='h-full flex-grow flex flex-nowrap overflow-x-scroll gap-4 px-2'>
 				{Object?.keys(sections)?.map((section) => (
-					<div
-						className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-2'
+					<motion.div
+						variants={sectionVariant}
+						initial='initial'
+						animate='animate'
+						className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-4'
 						key={section}
 					>
 						<h3>{section}</h3>
@@ -138,30 +165,36 @@ export default function list_uid() {
 								Delete section
 							</button>
 						)}
-						{sections[section]?.map((todo) => (
-							<button
-								key={todo.text}
-								className='grid w-full gap-2 hover:bg-gray-50 transition-colors bg-opacity-5 dark:hover:bg-gray-700  shadow-md dark:shadow-md-dark items-center p-2 rounded focus:ring-4 ring-blue-200 focus:outline-none'
-								style={{
-									gridTemplateColumns: '1.25rem 1fr',
-								}}
-								onClick={() => handleTodoClick(todo.id, todo.completed)}
-							>
-								<div className='h-5 w-5 rounded-full border-transparent border-2 overflow-hidden ring-opacity-100 ring-2'>
-									<div
-										className='h-full w-full  bg-blue-500'
-										style={{
-											clipPath: todo.completed
-												? 'ellipse(100% 100% at 50% 50%)'
-												: 'ellipse(0% 0% at 50% 50%)',
-											transition: 'clip-path 500ms ease-in-out',
-										}}
-									></div>
-								</div>
-								<p className='text-left'>{todo?.text}</p>
-							</button>
-						))}
-					</div>
+						<AnimatePresence>
+							{sections[section]?.map((todo) => (
+								<motion.div
+									variants={todoVariant}
+									initial='initial'
+									animate='animate'
+									exit='initial'
+									key={todo.text}
+									className='grid w-full gap-2 hover:bg-gray-50 transition-colors bg-opacity-5 dark:hover:bg-gray-700  shadow-md dark:shadow-md-dark items-center p-2 rounded focus:ring-4 ring-blue-200 focus:outline-none'
+									style={{
+										gridTemplateColumns: '1.25rem 1fr',
+									}}
+									onClick={() => handleTodoClick(todo.id, todo.completed)}
+								>
+									<div className='h-5 w-5 rounded-full border-transparent border-2 overflow-hidden ring-opacity-100 ring-2'>
+										<div
+											className='h-full w-full  bg-blue-500'
+											style={{
+												clipPath: todo.completed
+													? 'ellipse(100% 100% at 50% 50%)'
+													: 'ellipse(0% 0% at 50% 50%)',
+												transition: 'clip-path 500ms ease-in-out',
+											}}
+										></div>
+									</div>
+									<p className='text-left'>{todo?.text}</p>
+								</motion.div>
+							))}
+						</AnimatePresence>
+					</motion.div>
 				))}
 				<form
 					className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-2'

@@ -1,3 +1,37 @@
+::-webkit-scrollbar {
+	width: 4px;
+	height: 4px;
+}
+::-webkit-scrollbar-button {
+	width: 0px;
+	height: 0px;
+}
+::-webkit-scrollbar-thumb {
+	background: rgb(63, 81, 107);
+	border: 0px none #ffffff;
+	border-radius: 50px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: rgb(77, 101, 134);
+}
+::-webkit-scrollbar-thumb:active {
+	background: rgb(77, 101, 134);
+}
+::-webkit-scrollbar-track {
+	background: rgba(55, 65, 81, 0.5);
+	border: 0px none #ffffff;
+	border-radius: 50px;
+}
+::-webkit-scrollbar-track:hover {
+	background: rgba(55, 65, 81, 0.5);
+}
+::-webkit-scrollbar-track:active {
+	background: rgba(55, 65, 81, 0.5);
+}
+::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
 html,
 body {
 	width: 100%;
@@ -23,27 +57,22 @@ a {
 }
 
 h1 {
-	@apply text-6xl;
 	font-family: 'Fira Sans', sans-serif;
 }
 
 h2 {
-	@apply text-2xl mb-3;
 	font-family: 'Fira Sans', sans-serif;
 }
 
 h3 {
-	@apply text-xl font-bold;
 	font-family: 'Fira Sans', sans-serif;
 }
 
 h4 {
-	@apply text-lg font-medium;
 	font-family: 'Fira Sans', sans-serif;
 }
 
 p {
-	@apply text-xl;
 	font-family: 'Montserrat', sans-serif;
 }
 

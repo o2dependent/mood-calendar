@@ -8,7 +8,7 @@ export default function AppLayout({ children }) {
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 	// --- markup ---
 	return (
-		<div className='w-100 h-full flex flex-col dark:text-gray-200 dark:bg-gray-800'>
+		<div className='w-100 h-full flex flex-col dark:text-gray-200 bg-gray-100 dark:bg-gray-800'>
 			<AppNav toggleMenu={() => setIsMenuOpen(!isMenuOpen)} />
 			<div className={`content-wrapper ${isMenuOpen ? 'open' : ''}`}>
 				<AppMenu

@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion';
 import Link from 'next/link';
 import React, { useRef } from 'react';
 import { useFirestore } from '../../../context/FirestoreContext';
@@ -30,9 +31,18 @@ export default function Friends({ closeMenu }) {
 			// TODO: set error message
 		}
 	};
+	// --- framer motion variants ---
+	const friendVariant = {
+		initial: {
+			opacity: 0,
+		},
+		animate: {
+			opacity: 1,
+		},
+	};
 	// --- markup ---
 	return (
-		<div className=''>
+		<motion.div className=''>
 			<form onSubmit={handleSubmit}>
 				<input
 					type='text'
@@ -46,7 +56,11 @@ export default function Friends({ closeMenu }) {
 					<h4>Pending</h4>
 					<div className='flex flex-col gap-4'>
 						{pendingRequests.map((friend) => (
-							<div
+							<motion.div
+								variants={friendVariant}
+								initial='initial'
+								animate='animate'
+								exit='initial'
 								key={friend}
 								className='bg-gray-200 grid grid-cols-2 grid-rows-2 gap-x-2  dark:bg-gray-800 dark:shadow-md-dark shadow-md rounded h-24 w-full p-2'
 							>
@@ -63,27 +77,11 @@ export default function Friends({ closeMenu }) {
 								>
 									Accept
 								</button>
-							</div>
+							</motion.div>
 						))}
 					</div>
 				</div>
 			)}
-			{sentRequests.length > 0 && (
-				<div>
-					<h4>Sent</h4>
-					<div className='flex flex-col gap-4'>
-						{sentRequests.map((friend) => (
-							<div
-								key={friend}
-								className='flex items-center dark:bg-gray-800 shadow-md bg-gray-200 h-14 w-full p-2 rounded dark:shadow-md-dark'
-							>
-								<p className='text-base'>{friend}</p>
-							</div>
-						))}
-					</div>
-				</div>
-			)}
-
 			<div>
 				<h4>Friends</h4>
 				<div className='flex flex-col gap-4'>
@@ -102,6 +100,21 @@ export default function Friends({ closeMenu }) {
 						))}
 				</div>
 			</div>
-		</div>
+			{sentRequests.length > 0 && (
+				<div>
+					<h4>Sent</h4>
+					<div className='flex flex-col gap-4'>
+						{sentRequests.map((friend) => (
+							<div
+								key={friend}
+								className='flex items-center dark:bg-gray-800 shadow-md bg-gray-200 h-10 w-full p-2 rounded dark:shadow-md-dark'
+							>
+								<p className='text-base'>{friend}</p>
+							</div>
+						))}
+					</div>
+				</div>
+			)}
+		</motion.div>
 	);
 }

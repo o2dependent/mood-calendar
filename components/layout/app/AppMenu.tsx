@@ -22,7 +22,12 @@ export default function AppMenu({ isMenuOpen, closeMenu }) {
 				isMenuOpen ? 'open' : ''
 			}`}
 		>
-			<button onClick={closeMenu}>close</button>
+			<div>
+				<button onClick={closeMenu}>close</button>
+				<Link href='/app/settings'>
+					<a onClick={closeMenu}>Settings</a>
+				</Link>
+			</div>
 			<div className='relative w-full md:h-9 h-12 mb-4'>
 				<div className='inbox-tab__title dark:shadow-inner   bg-gray-200 dark:bg-gray-900 dark:text-gray-400 rounded'>
 					<p

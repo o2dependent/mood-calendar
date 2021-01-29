@@ -20,7 +20,7 @@ export default function Lists({ closeMenu }) {
 	};
 
 	return (
-		<div>
+		<div className='flex flex-col gap-4'>
 			<form
 				className='inline-flex min-w-9/10 flex-col gap-2'
 				onSubmit={handleAddNewList}
@@ -33,7 +33,7 @@ export default function Lists({ closeMenu }) {
 					<Link href={`/app/l/${list.id}`} key={list.id}>
 						<a
 							onClick={closeMenu}
-							className='flex items-center bg-gray-200 h-14 w-full p-2'
+							className='flex items-center rounded shadow-md dark:bg-gray-800 bg-gray-200 dark:shadow-md-dark h-11 w-full p-2'
 						>
 							<p className=''>{list.title}</p>
 						</a>
