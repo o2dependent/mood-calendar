@@ -17,9 +17,14 @@ export default function AppMenu({ isMenuOpen, closeMenu }) {
 		}
 	};
 	return (
-		<div className={`nav-menu ${isMenuOpen ? 'open' : ''}`}>
+		<div
+			className={`nav-menu dark:bg-gray-800 top-0 md:top-auto overflow-y-scroll ${
+				isMenuOpen ? 'open' : ''
+			}`}
+		>
+			<button onClick={closeMenu}>close</button>
 			<div className='relative w-full md:h-9 h-12 mb-4'>
-				<div className='inbox-tab__title bg-gray-200 rounded'>
+				<div className='inbox-tab__title dark:shadow-inner   bg-gray-200 dark:bg-gray-900 dark:text-gray-400 rounded'>
 					<p
 						className='cursor-pointer h-full flex items-center justify-center'
 						onClick={() => setCurrentTab('Social')}
@@ -34,7 +39,7 @@ export default function AppMenu({ isMenuOpen, closeMenu }) {
 					</p>
 				</div>
 				<div
-					className={`inbox-tab__title ${currentTab} text-white font-medium bg-red-500 rounded`}
+					className={`inbox-tab__title dark:shadow-md-dark ${currentTab} text-white font-medium bg-red-500 rounded`}
 				>
 					<p className='cursor-default h-full flex items-center justify-center'>
 						Social
@@ -44,7 +49,8 @@ export default function AppMenu({ isMenuOpen, closeMenu }) {
 					</p>
 				</div>
 			</div>
-			<div className='rounded overflow-hidden'>{renderTab()}</div>
+			<div></div>
+			<div className=''>{renderTab()}</div>
 		</div>
 	);
 }

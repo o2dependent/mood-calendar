@@ -84,7 +84,7 @@ export default function list_uid() {
 	document.body.setAttribute('class', 'dark');
 	console.log(document.body.classList.contains('dark'));
 	return (
-		<>
+		<div className='flex flex-col flex-grow overflow-hidden'>
 			<div className='px-2'>
 				<h2>{listRes?.title}</h2>
 				<button onClick={() => setIsAddFriendMenuOpen(!isAddFriendMenuOpen)}>
@@ -107,9 +107,12 @@ export default function list_uid() {
 						})}
 				</div>
 			)}
-			<div className='h-full flex flex-nowrap overflow-x-auto gap-2 px-2'>
+			<div className='h-full flex-grow flex flex-nowrap overflow-x-scroll gap-2 px-2'>
 				{Object?.keys(sections)?.map((section) => (
-					<div className='inline-flex min-w-9/10 flex-col gap-2' key={section}>
+					<div
+						className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-2'
+						key={section}
+					>
 						<h3>{section}</h3>
 						<form
 							onSubmit={(e) => {
@@ -138,7 +141,7 @@ export default function list_uid() {
 						{sections[section]?.map((todo) => (
 							<button
 								key={todo.text}
-								className='grid w-full gap-2 shadow-md items-center p-2 rounded focus:ring-4 ring-blue-200 focus:outline-none'
+								className='grid w-full gap-2 hover:bg-gray-50 transition-colors bg-opacity-5 dark:hover:bg-gray-700  shadow-md dark:shadow-md-dark items-center p-2 rounded focus:ring-4 ring-blue-200 focus:outline-none'
 								style={{
 									gridTemplateColumns: '1.25rem 1fr',
 								}}
@@ -161,7 +164,7 @@ export default function list_uid() {
 					</div>
 				))}
 				<form
-					className='inline-flex min-w-9/10 flex-col gap-2'
+					className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-2'
 					onSubmit={handleAddNewSection}
 				>
 					<input
@@ -172,6 +175,6 @@ export default function list_uid() {
 					<button type='submit'>Add new section</button>
 				</form>
 			</div>
-		</>
+		</div>
 	);
 }

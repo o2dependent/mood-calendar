@@ -9,7 +9,6 @@ import WithAuth from '../components/middleware/withAuth';
 
 function MyApp({ Component, pageProps }) {
 	const router = useRouter();
-
 	return (
 		<AuthProvider>
 			<Head>

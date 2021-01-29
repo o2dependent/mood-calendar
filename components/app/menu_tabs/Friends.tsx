@@ -32,40 +32,50 @@ export default function Friends({ closeMenu }) {
 	};
 	// --- markup ---
 	return (
-		<div>
+		<div className=''>
+			<form onSubmit={handleSubmit}>
+				<input
+					type='text'
+					placeholder='Add friend by email'
+					required
+					ref={newFriendRef}
+				/>
+			</form>
 			{pendingRequests.length > 0 && (
 				<div>
 					<h4>Pending</h4>
-					{pendingRequests.map((friend) => (
-						<div
-							key={friend}
-							className='bg-gray-200 grid grid-cols-2 grid-rows-2 gap-x-2 rounded h-24 w-full p-2'
-						>
-							<p className='text-md w-full text-lg col-span-2'>{friend}</p>
-							<button
-								onClick={() => declineFriendRequest(friend)}
-								className='bg-gray-50 font-medium text-gray-700 p-1 w-full h-10 rounded'
+					<div className='flex flex-col gap-4'>
+						{pendingRequests.map((friend) => (
+							<div
+								key={friend}
+								className='bg-gray-200 grid grid-cols-2 grid-rows-2 gap-x-2  dark:bg-gray-800 dark:shadow-md-dark shadow-md rounded h-24 w-full p-2'
 							>
-								Decline
-							</button>
-							<button
-								onClick={() => acceptFriendRequest(friend)}
-								className='bg-red-500 text-white font-medium p-1 w-full h-10 rounded'
-							>
-								Accept
-							</button>
-						</div>
-					))}
+								<p className='text-md w-full text-lg col-span-2'>{friend}</p>
+								<button
+									onClick={() => declineFriendRequest(friend)}
+									className='bg-gray-50  dark:bg-gray-700 dark:text-gray-400 font-medium text-gray-700 p-1 w-full h-10 rounded'
+								>
+									Decline
+								</button>
+								<button
+									onClick={() => acceptFriendRequest(friend)}
+									className='bg-red-500 text-white font-medium p-1 w-full h-10 rounded'
+								>
+									Accept
+								</button>
+							</div>
+						))}
+					</div>
 				</div>
 			)}
 			{sentRequests.length > 0 && (
-				<div className='rounded overflow-hidden'>
+				<div>
 					<h4>Sent</h4>
-					<div className='rounded overflow-hidden'>
+					<div className='flex flex-col gap-4'>
 						{sentRequests.map((friend) => (
 							<div
 								key={friend}
-								className='flex items-center bg-gray-200 h-10 w-full p-2'
+								className='flex items-center dark:bg-gray-800 shadow-md bg-gray-200 h-14 w-full p-2 rounded dark:shadow-md-dark'
 							>
 								<p className='text-base'>{friend}</p>
 							</div>
@@ -76,14 +86,14 @@ export default function Friends({ closeMenu }) {
 
 			<div>
 				<h4>Friends</h4>
-				<div className='rounded overflow-hidden'>
+				<div className='flex flex-col gap-4'>
 					{friends &&
 						friends.map((friend) => (
 							<Link href={`/app/m/${friend}`}>
 								<a
 									onClick={closeMenu}
 									key={friend}
-									className='flex items-center bg-gray-200 h-14 w-full p-2'
+									className='flex items-center dark:bg-gray-800 shadow-md bg-gray-200 h-14 w-full p-2 rounded dark:shadow-md-dark'
 								>
 									<p className=''>{friend}</p>
 									{/* <button onClick={() => removeFriend(friend)}>Remove</button> */}
@@ -92,9 +102,6 @@ export default function Friends({ closeMenu }) {
 						))}
 				</div>
 			</div>
-			<form onSubmit={handleSubmit}>
-				<input type='text' required ref={newFriendRef} />
-			</form>
 		</div>
 	);
 }

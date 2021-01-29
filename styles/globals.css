@@ -48,7 +48,7 @@ p {
 }
 
 input {
-	@apply shadow-inner w-full bg-gray-50 p-2 rounded mb-4 outline-none;
+	@apply shadow-inner w-full bg-gray-50 dark:bg-gray-700 p-2 rounded mb-4 outline-none;
 }
 
 .box-accent {
@@ -73,7 +73,7 @@ input {
 	background-color: #fafafa;
 	box-shadow: 0 0 10px 1px #00000012;
 	transition: left var(--delay);
-	@apply md:pl-10 md:pt-9 md:pr-2 md:w-96 md:left-0 -left-full px-2 pt-4 w-full h-full fixed;
+	@apply md:pl-10 md:pt-9 md:pr-2 md:w-96 md:left-0 dark:shadow-md-dark -left-full p-4 w-full h-full fixed;
 }
 
 .nav-menu.open {
@@ -89,10 +89,6 @@ input {
 	.content-wrapper {
 		width: calc(100% - 24rem);
 	}
-}
-
-.content-main {
-	@apply pt-10 w-full;
 }
 
 .inbox-tab__title {
