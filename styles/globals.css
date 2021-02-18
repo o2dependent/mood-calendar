@@ -7,18 +7,18 @@
 	height: 0px;
 }
 ::-webkit-scrollbar-thumb {
-	background: rgb(63, 81, 107);
+	background: rgb(55, 65, 81);
 	border: 0px none #ffffff;
 	border-radius: 50px;
 }
 ::-webkit-scrollbar-thumb:hover {
-	background: rgb(77, 101, 134);
+	background: rgb(55, 65, 81);
 }
 ::-webkit-scrollbar-thumb:active {
-	background: rgb(77, 101, 134);
+	background: rgb(55, 65, 81);
 }
 ::-webkit-scrollbar-track {
-	background: rgba(55, 65, 81, 0.5);
+	background: rgb(31, 41, 55);
 	border: 0px none #ffffff;
 	border-radius: 50px;
 }
@@ -57,23 +57,23 @@ a {
 }
 
 h1 {
-	font-family: 'Fira Sans', sans-serif;
+	font-family: 'Poppins', sans-serif;
 }
 
 h2 {
-	font-family: 'Fira Sans', sans-serif;
+	font-family: 'Poppins', sans-serif;
 }
 
 h3 {
-	font-family: 'Fira Sans', sans-serif;
+	font-family: 'Poppins', sans-serif;
 }
 
 h4 {
-	font-family: 'Fira Sans', sans-serif;
+	font-family: 'Poppins', sans-serif;
 }
 
 p {
-	font-family: 'Montserrat', sans-serif;
+	font-family: 'Open Sans', sans-serif;
 }
 
 input {
@@ -102,7 +102,7 @@ input {
 	background-color: #fafafa;
 	box-shadow: 0 0 10px 1px #00000012;
 	transition: left var(--delay);
-	@apply md:pl-10 md:pt-9 md:pr-2 md:w-96 md:left-0 dark:shadow-md-dark -left-full p-4 w-full h-full fixed;
+	@apply md:pt-9 md:px-4 md:w-96 md:left-0 dark:shadow-md-dark -left-full p-4 w-full h-full fixed;
 }
 
 .nav-menu.open {
@@ -112,7 +112,7 @@ input {
 .content-wrapper {
 	--delay: 500ms ease;
 	transition: width var(--delay), margin var(--delay);
-	@apply flex flex-row flex-grow w-full relative md:ml-96 md:px-10;
+	@apply flex flex-row flex-grow w-full relative md:ml-96;
 }
 @media screen and (min-width: 768px) {
 	.content-wrapper {
@@ -132,4 +132,16 @@ input {
 
 .inbox-tab__title.Social {
 	clip-path: polygon(0% 100%, 50% 100%, 50% 0%, 0 0%);
+}
+
+.box-shadow {
+	@apply shadow-md dark:shadow-md-dark;
+}
+
+.btn {
+	@apply dark:bg-red-500 px-4 py-2 rounded font-medium;
+}
+
+.btn-hollow {
+	@apply px-4 py-2 rounded opacity-90 hover:opacity-100 font-medium border-2 transition-colors border-red-500 text-red-500;
 }

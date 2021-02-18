@@ -166,6 +166,14 @@ export function FirestoreProvider({ children }) {
 			console.error(err);
 		}
 	}
+	// delete list
+	async function deleteList(listId: string) {
+		try {
+			await listsDisplayRef.doc(listId).delete();
+		} catch (err) {
+			console.error(err);
+		}
+	}
 	// toggle todos completed
 	async function toggleTodoCompleted(
 		listId: string,
@@ -253,6 +261,7 @@ export function FirestoreProvider({ children }) {
 		addNewList,
 		deleteSection,
 		addFriendToList,
+		deleteList,
 		friends,
 		pendingRequests,
 		sentRequests,

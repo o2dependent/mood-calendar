@@ -69,7 +69,7 @@ function Message({ msg }) {
 	const { currentUser } = useAuth();
 	const messageClass =
 		email === currentUser.email
-			? 'ml-auto bg-gray-200'
+			? 'ml-auto bg-gray-200 dark:text-black'
 			: 'bg-red-500 text-white';
 	const containerClass = email === currentUser.email ? 'ml-auto' : '';
 

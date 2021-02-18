@@ -31,6 +31,7 @@ export default function list_uid() {
 	const {
 		listsDisplayRef,
 		toggleTodoCompleted,
+		deleteList,
 		deleteSection,
 		addNewTodo,
 		addNewSection,
@@ -46,7 +47,7 @@ export default function list_uid() {
 	// make query for document with list_uid
 	const todosQuery = listsDisplayRef.doc(doc_uid).collection('todos');
 	// subscribe user to snapshot of this list document
-	const [todosRes] = useCollection(todosQuery);
+	const [todosRes, loading] = useCollection(todosQuery);
 	useEffect(() => {
 		const newTodosRes = todosRes?.docs?.map((doc) => ({
 			id: doc?.id,
@@ -82,132 +83,168 @@ export default function list_uid() {
 		deleteTodo(doc_uid, todoId);
 		// toggleTodoCompleted(doc_uid, todoId, todoCompleted)
 	}
+	// handle delting list
+	function handleDeleteList() {
+		deleteList(doc_uid);
+		router.push('/app');
+	}
 	// --- framer motion variants ---
 	const todoVariant = {
 		initial: {
 			opacity: 0,
-		},
-		animate: {
-			duration: 1,
-			opacity: 1,
-		},
-	};
-	const sectionVariant = {
-		initial: {
-			opacity: 0,
 			transition: {
-				staggerChildren: 5,
+				duration: 0.5,
 			},
 		},
 		animate: {
 			opacity: 1,
 			transition: {
 				duration: 1,
-				staggerChildren: 5,
 			},
 		},
 	};
+	const sectionVariant = {
+		initial: {
+			opacity: 0,
+			transition: {
+				staggerChildren: 0.5,
+			},
+		},
+		animate: {
+			opacity: 1,
+			transition: {
+				duration: 0.25,
+				staggerChildren: 0.5,
+			},
+		},
+	};
+	const todoContainerVariant = {
+		initial: {
+			opacity: 0,
+		},
+		animate: {
+			opacity: 1,
+		},
+	};
 	return (
-		<div className='flex flex-col flex-grow overflow-hidden'>
-			<div className='px-2'>
-				<h2>{listRes?.title}</h2>
-				<button onClick={() => setIsAddFriendMenuOpen(!isAddFriendMenuOpen)}>
-					Add friend to list
-				</button>
-			</div>
-			{isAddFriendMenuOpen && (
-				<div className='px-2'>
-					{friends &&
-						friends.map((friend) => {
-							return listRes?.users?.includes(friend) ? null : (
-								<button
-									onClick={() => addFriendToList(doc_uid, friend)}
-									key={friend}
-									className='flex items-center bg-gray-200 h-14 w-full p-2'
-								>
-									<p className=''>{friend}</p>
-								</button>
-							);
-						})}
-				</div>
-			)}
-			<div className='h-full flex-grow flex flex-nowrap overflow-x-scroll gap-4 px-2'>
-				{Object?.keys(sections)?.map((section) => (
-					<motion.div
-						variants={sectionVariant}
-						initial='initial'
-						animate='animate'
-						className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-4'
-						key={section}
-					>
-						<h3>{section}</h3>
-						<form
-							onSubmit={(e) => {
-								e.preventDefault();
-								handleAddNewTodo(section);
-							}}
+		!loading && (
+			<div className='flex flex-col flex-grow overflow-hidden'>
+				<div className='px-2 grid grid-rows-2  md:px-6'>
+					<h2>{listRes?.title}</h2>
+					<div className='flex w-full justify-between mb-4'>
+						<button
+							className='btn'
+							onClick={() => setIsAddFriendMenuOpen(!isAddFriendMenuOpen)}
 						>
-							<input
-								placeholder={`Add item to ${section}`}
-								type='text'
-								value={sectionInput[section]}
-								onChange={(e) =>
-									setSectionInput({
-										...sectionInput,
-										[section]: e.target.value,
-									})
-								}
-							/>
-							<button type='submit'>Add new todo</button>
-						</form>
-						{sections[section]?.length === 0 && (
-							<button onClick={() => deleteSection(doc_uid, section)}>
-								Delete section
-							</button>
-						)}
-						<AnimatePresence>
-							{sections[section]?.map((todo) => (
-								<motion.div
-									variants={todoVariant}
-									initial='initial'
-									animate='animate'
-									exit='initial'
-									key={todo.text}
-									className='grid w-full gap-2 hover:bg-gray-50 transition-colors bg-opacity-5 dark:hover:bg-gray-700  shadow-md dark:shadow-md-dark items-center p-2 rounded focus:ring-4 ring-blue-200 focus:outline-none'
-									style={{
-										gridTemplateColumns: '1.25rem 1fr',
-									}}
-									onClick={() => handleTodoClick(todo.id, todo.completed)}
-								>
-									<div className='h-5 w-5 rounded-full border-transparent border-2 overflow-hidden ring-opacity-100 ring-2'>
-										<div
-											className='h-full w-full  bg-blue-500'
+							Add friend to list
+						</button>
+						<button className='btn-hollow ml-auto' onClick={handleDeleteList}>
+							Delete List
+						</button>
+					</div>
+				</div>
+				{isAddFriendMenuOpen && (
+					<div className='flex flex-col gap-2 px-2 md:px-6'>
+						{friends &&
+							friends.map((friend) => {
+								return listRes?.users?.includes(friend) ? null : (
+									<button
+										onClick={() => addFriendToList(doc_uid, friend)}
+										key={friend}
+										className='flex items-center rounded box-shadow dark:bg-gray-800 bg-gray-200 h-10 w-full p-2'
+									>
+										<p className=''>{friend}</p>
+									</button>
+								);
+							})}
+					</div>
+				)}
+				<div className='h-full flex-grow flex flex-nowrap break-all overflow-x-scroll gap-4 px-2 md:px-6'>
+					{Object?.keys(sections)?.map((section) => (
+						<motion.div
+							variants={sectionVariant}
+							initial='initial'
+							animate='animate'
+							className='flex md:w-96 md:min-w-250 min-w-9/10 flex-col gap-4'
+							key={section}
+						>
+							<h3>{section}</h3>
+							<form
+								onSubmit={(e) => {
+									e.preventDefault();
+									handleAddNewTodo(section);
+								}}
+							>
+								<input
+									placeholder={`Add item to ${section}`}
+									type='text'
+									value={sectionInput[section]}
+									onChange={(e) =>
+										setSectionInput({
+											...sectionInput,
+											[section]: e.target.value,
+										})
+									}
+								/>
+								<button type='submit'>Add new todo</button>
+							</form>
+							{sections[section]?.length === 0 && (
+								<button onClick={() => deleteSection(doc_uid, section)}>
+									Delete section
+								</button>
+							)}
+							<motion.div
+								className='w-100 flex flex-col gap-4'
+								variants={todoContainerVariant}
+								initial='initial'
+								animate='animate'
+								exit='initial'
+							>
+								<AnimatePresence>
+									{sections[section]?.map((todo) => (
+										<motion.button
+											variants={todoVariant}
+											initial='initial'
+											animate='animate'
+											exit='initial'
+											key={todo.text}
+											className='grid w-full gap-2 hover:bg-gray-50 transition-colors bg-opacity-5 dark:hover:bg-gray-700 box-shadow items-center p-2 rounded focus:ring-4 ring-blue-200 focus:outline-none'
 											style={{
-												clipPath: todo.completed
-													? 'ellipse(100% 100% at 50% 50%)'
-													: 'ellipse(0% 0% at 50% 50%)',
-												transition: 'clip-path 500ms ease-in-out',
+												gridTemplateColumns: '1.25rem 1fr',
 											}}
-										></div>
-									</div>
-									<p className='text-left'>{todo?.text}</p>
-								</motion.div>
-							))}
-						</AnimatePresence>
-					</motion.div>
-				))}
-				<form
-					className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-2'
-					onSubmit={handleAddNewSection}
-				>
-					<input
-						placeholder='Add a new section'
-						type='text'
-						ref={newSectionRef}
-					/>
-					<button type='submit'>Add new section</button>
-				</form>
+											onClick={() => handleTodoClick(todo.id, todo.completed)}
+										>
+											<div className='h-5 w-5 rounded-full border-transparent border-2 overflow-hidden ring-opacity-100 ring-2'>
+												<div
+													className='h-full w-full  bg-blue-500'
+													style={{
+														transition: 'clip-path 500ms ease-in-out',
+														clipPath: todo.completed
+															? 'ellipse(100% 100% at 50% 50%)'
+															: 'ellipse(0% 0% at 50% 50%)',
+													}}
+												></div>
+											</div>
+											<p className='text-left'>{todo?.text}</p>
+										</motion.button>
+									))}
+								</AnimatePresence>
+							</motion.div>
+						</motion.div>
+					))}
+					<form
+						className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-2'
+						onSubmit={handleAddNewSection}
+					>
+						<input
+							placeholder='Add a new section'
+							type='text'
+							ref={newSectionRef}
+						/>
+						<button type='submit'>Add new section</button>
+					</form>
+				</div>
 			</div>
-		</div>
+		)
 	);
 }

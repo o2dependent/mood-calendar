@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDarkMode } from '../../context/DarkModeContext';
 
 export default function settings() {
+	// --- hooks ---
+	const { setClientDarkMode, isDarkModeEnabled } = useDarkMode();
+
 	// --- functions ---
-	const isDarkMode = () => document.body.classList.contains('dark');
 	function toggleDarkMode() {
-		document.body.setAttribute('class', isDarkMode() ? '' : 'dark');
+		console.log(isDarkModeEnabled);
+		setClientDarkMode(isDarkModeEnabled === 'enabled' ? 'disabled' : 'enabled');
 	}
 
 	return (
 		<div>
 			<button onClick={toggleDarkMode}>
-				{isDarkMode() ? 'Disable ' : 'Enable '}dark mode
+				{isDarkModeEnabled === 'enabled' ? 'Disable ' : 'Enable '}dark mode
 			</button>
 		</div>
 	);

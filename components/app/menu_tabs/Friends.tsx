@@ -42,7 +42,7 @@ export default function Friends({ closeMenu }) {
 	};
 	// --- markup ---
 	return (
-		<motion.div className=''>
+		<div className=''>
 			<form onSubmit={handleSubmit}>
 				<input
 					type='text'
@@ -115,6 +115,6 @@ export default function Friends({ closeMenu }) {
 					</div>
 				</div>
 			)}
-		</motion.div>
+		</div>
 	);
 }
