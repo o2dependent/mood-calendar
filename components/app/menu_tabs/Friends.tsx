@@ -62,7 +62,7 @@ export default function Friends({ closeMenu }) {
 								animate='animate'
 								exit='initial'
 								key={friend}
-								className='bg-gray-200 grid grid-cols-2 grid-rows-2 gap-x-2  dark:bg-gray-800 dark:shadow-md-dark shadow-md rounded h-24 w-full p-2'
+								className='bg-gray-200 grid grid-cols-2 grid-rows-2 gap-x-2 dark:bg-gray-800 rounded h-24 w-full p-2 border border-white border-opacity-10 hover:bg-gray-300 dark:hover:bg-gray-900'
 							>
 								<p className='text-md w-full text-lg col-span-2'>{friend}</p>
 								<button
@@ -91,7 +91,7 @@ export default function Friends({ closeMenu }) {
 								<a
 									onClick={closeMenu}
 									key={friend}
-									className='flex items-center dark:bg-gray-800 shadow-md bg-gray-200 h-14 w-full p-2 rounded dark:shadow-md-dark'
+									className='flex items-center dark:bg-gray-800 bg-gray-200 h-12 w-full p-2 rounded border border-white border-opacity-10 hover:bg-gray-300 dark:hover:bg-gray-900'
 								>
 									<p className=''>{friend}</p>
 									{/* <button onClick={() => removeFriend(friend)}>Remove</button> */}
@@ -107,7 +107,7 @@ export default function Friends({ closeMenu }) {
 						{sentRequests.map((friend) => (
 							<div
 								key={friend}
-								className='flex items-center dark:bg-gray-800 shadow-md bg-gray-200 h-10 w-full p-2 rounded dark:shadow-md-dark'
+								className='flex items-center dark:bg-gray-800 bg-gray-200 h-10 w-full p-2 rounded border border-white border-opacity-25 opacity-50'
 							>
 								<p className='text-base'>{friend}</p>
 							</div>

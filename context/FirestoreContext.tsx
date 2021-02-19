@@ -191,12 +191,18 @@ export function FirestoreProvider({ children }) {
 		}
 	}
 	// create todo
-	async function addNewTodo(listId: string, text: string, section: string) {
+	async function addNewTodo(
+		listId: string,
+		text: string,
+		section: string,
+		priority: number
+	) {
 		try {
 			await listsDisplayRef.doc(listId).collection('todos').add({
 				text,
 				section,
 				completed: false,
+				priority,
 			});
 		} catch (err) {
 			console.error(err);

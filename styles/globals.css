@@ -145,3 +145,12 @@ input {
 .btn-hollow {
 	@apply px-4 py-2 rounded opacity-90 hover:opacity-100 font-medium border-2 transition-colors border-red-500 text-red-500;
 }
+
+.todo-checkbox {
+	clip-path: ellipse(0% 0% at 50% 50%);
+	transition: clip-path 400ms ease;
+}
+
+.todo-checkbox-container:hover .todo-checkbox {
+	clip-path: ellipse(100% 100% at 50% 50%);
+}

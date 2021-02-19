@@ -33,7 +33,7 @@ export default function Lists({ closeMenu }) {
 					<Link href={`/app/l/${list.id}`} key={list.id}>
 						<a
 							onClick={closeMenu}
-							className='flex items-center rounded shadow-md dark:bg-gray-800 bg-gray-200 dark:shadow-md-dark h-11 w-full p-2'
+							className='flex items-center dark:bg-gray-800 bg-gray-200 h-12 w-full p-2 rounded border border-white border-opacity-10 hover:bg-gray-300 dark:hover:bg-gray-900'
 						>
 							<p className=''>{list.title}</p>
 						</a>

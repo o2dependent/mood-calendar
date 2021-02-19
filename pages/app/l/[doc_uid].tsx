@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { useCollection, useDocumentData } from 'react-firebase-hooks/firestore';
+import Section from '../../../components/layout/app/list/Section';
 import { I_User, useFirestore } from '../../../context/FirestoreContext';
 import { getValueFromRef } from '../../../helpers/getValueFromRef';
 import resetRefValue from '../../../helpers/resetRefValue';
@@ -21,7 +22,7 @@ interface I_ListRes {
 export default function list_uid() {
 	// --- hooks ---
 	const [sections, setSections] = useState<object>({});
-	const [sectionInput, setSectionInput] = useState({});
+	const [sectionNames, setSectionNames] = useState<string[]>([]);
 	const [isAddFriendMenuOpen, setIsAddFriendMenuOpen] = useState(false);
 	const newSectionRef = useRef(null);
 	// get list_uid from page query
@@ -30,12 +31,8 @@ export default function list_uid() {
 	// get listRef from firestore
 	const {
 		listsDisplayRef,
-		toggleTodoCompleted,
 		deleteList,
-		deleteSection,
-		addNewTodo,
 		addNewSection,
-		deleteTodo,
 		friends,
 		addFriendToList,
 	} = useFirestore();
@@ -57,16 +54,8 @@ export default function list_uid() {
 		listRes?.sections?.forEach((section) => (newTodos[section] = []));
 		newTodosRes?.forEach((todo) => newTodos[todo?.section]?.push(todo));
 		setSections(newTodos);
+		setSectionNames(Object?.keys(newTodos));
 	}, [todosRes, listRes]);
-
-	// handle sumbit of adding new todo
-	function handleAddNewTodo(section) {
-		// get and reset ref value
-		const text = sectionInput[section];
-		setSectionInput({ ...sectionInput, [section]: '' });
-		// create new todo
-		addNewTodo(doc_uid, text, section);
-	}
 
 	// handle submit of aqdding new section
 	function handleAddNewSection(e) {
@@ -77,55 +66,13 @@ export default function list_uid() {
 		// create new section
 		addNewSection(doc_uid, section);
 	}
-	// handle toggling or deleting todo
-	function handleTodoClick(todoId: string, todoCompleted: boolean) {
-		// if list setting is to delete else toggle
-		deleteTodo(doc_uid, todoId);
-		// toggleTodoCompleted(doc_uid, todoId, todoCompleted)
-	}
+
 	// handle delting list
 	function handleDeleteList() {
 		deleteList(doc_uid);
 		router.push('/app');
 	}
-	// --- framer motion variants ---
-	const todoVariant = {
-		initial: {
-			opacity: 0,
-			transition: {
-				duration: 0.5,
-			},
-		},
-		animate: {
-			opacity: 1,
-			transition: {
-				duration: 1,
-			},
-		},
-	};
-	const sectionVariant = {
-		initial: {
-			opacity: 0,
-			transition: {
-				staggerChildren: 0.5,
-			},
-		},
-		animate: {
-			opacity: 1,
-			transition: {
-				duration: 0.25,
-				staggerChildren: 0.5,
-			},
-		},
-	};
-	const todoContainerVariant = {
-		initial: {
-			opacity: 0,
-		},
-		animate: {
-			opacity: 1,
-		},
-	};
+
 	return (
 		!loading && (
 			<div className='flex flex-col flex-grow overflow-hidden'>
@@ -151,7 +98,7 @@ export default function list_uid() {
 									<button
 										onClick={() => addFriendToList(doc_uid, friend)}
 										key={friend}
-										className='flex items-center rounded box-shadow dark:bg-gray-800 bg-gray-200 h-10 w-full p-2'
+										className='flex items-center rounded dark:bg-gray-800 bg-gray-200 h-10 w-full p-2'
 									>
 										<p className=''>{friend}</p>
 									</button>
@@ -159,78 +106,19 @@ export default function list_uid() {
 							})}
 					</div>
 				)}
-				<div className='h-full flex-grow flex flex-nowrap break-all overflow-x-scroll gap-4 px-2 md:px-6'>
-					{Object?.keys(sections)?.map((section) => (
-						<motion.div
-							variants={sectionVariant}
-							initial='initial'
-							animate='animate'
-							className='flex md:w-96 md:min-w-250 min-w-9/10 flex-col gap-4'
+				<div
+					style={{
+						gridTemplateColumns: `repeat(${sectionNames?.length + 1}, 24rem)`,
+					}}
+					className='h-full flex-grow grid break-all overflow-x-scroll gap-4 px-2 md:px-6'
+				>
+					{sectionNames?.map((section) => (
+						<Section
+							sectionArr={sections[section]}
+							section={section}
+							doc_uid={doc_uid}
 							key={section}
-						>
-							<h3>{section}</h3>
-							<form
-								onSubmit={(e) => {
-									e.preventDefault();
-									handleAddNewTodo(section);
-								}}
-							>
-								<input
-									placeholder={`Add item to ${section}`}
-									type='text'
-									value={sectionInput[section]}
-									onChange={(e) =>
-										setSectionInput({
-											...sectionInput,
-											[section]: e.target.value,
-										})
-									}
-								/>
-								<button type='submit'>Add new todo</button>
-							</form>
-							{sections[section]?.length === 0 && (
-								<button onClick={() => deleteSection(doc_uid, section)}>
-									Delete section
-								</button>
-							)}
-							<motion.div
-								className='w-100 flex flex-col gap-4'
-								variants={todoContainerVariant}
-								initial='initial'
-								animate='animate'
-								exit='initial'
-							>
-								<AnimatePresence>
-									{sections[section]?.map((todo) => (
-										<motion.button
-											variants={todoVariant}
-											initial='initial'
-											animate='animate'
-											exit='initial'
-											key={todo.text}
-											className='grid w-full gap-2 hover:bg-gray-50 transition-colors bg-opacity-5 dark:hover:bg-gray-700 box-shadow items-center p-2 rounded focus:ring-4 ring-blue-200 focus:outline-none'
-											style={{
-												gridTemplateColumns: '1.25rem 1fr',
-											}}
-											onClick={() => handleTodoClick(todo.id, todo.completed)}
-										>
-											<div className='h-5 w-5 rounded-full border-transparent border-2 overflow-hidden ring-opacity-100 ring-2'>
-												<div
-													className='h-full w-full  bg-blue-500'
-													style={{
-														transition: 'clip-path 500ms ease-in-out',
-														clipPath: todo.completed
-															? 'ellipse(100% 100% at 50% 50%)'
-															: 'ellipse(0% 0% at 50% 50%)',
-													}}
-												></div>
-											</div>
-											<p className='text-left'>{todo?.text}</p>
-										</motion.button>
-									))}
-								</AnimatePresence>
-							</motion.div>
-						</motion.div>
+						/>
 					))}
 					<form
 						className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-2'
