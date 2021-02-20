@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
-import Friends from '../../app/menu_tabs/Friends';
-import Lists from '../../app/menu_tabs/Lists';
+import Friends from './menuTabs/Friends';
+import Lists from './menuTabs/Lists';
 
 export default function AppMenu({ isMenuOpen, closeMenu }) {
 	// --- hooks ---

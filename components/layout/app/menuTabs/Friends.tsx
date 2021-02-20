@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import React, { useRef } from 'react';
-import { useFirestore } from '../../../context/FirestoreContext';
-import { getValueFromRef } from '../../../helpers/getValueFromRef';
+import { useFirestore } from '../../../../context/FirestoreContext';
+import { getValueFromRef } from '../../../../helpers/getValueFromRef';
 
 export default function Friends({ closeMenu }) {
 	// --- hooks ---

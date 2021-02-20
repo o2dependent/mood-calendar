@@ -27,10 +27,12 @@ export default function Section({ section, doc_uid, sectionArr }) {
 		// get and reset ref value
 		const text = sectionInput;
 		const priority = sectionInputPriority;
-		setSectionInput('');
-		setsectionInputPriority(4);
-		// create new todo
-		addNewTodo(doc_uid, text, section, priority);
+		if (text !== '') {
+			setSectionInput('');
+			setsectionInputPriority(4);
+			// create new todo
+			addNewTodo(doc_uid, text, section, priority);
+		}
 	}
 	// --- framer motion variants ---
 	const sectionVariant = {
@@ -62,10 +64,10 @@ export default function Section({ section, doc_uid, sectionArr }) {
 			variants={sectionVariant}
 			initial='initial'
 			animate='animate'
-			className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-4'
+			className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-4 mt-4'
 			key={section}
 		>
-			<div className='flex justify-between'>
+			<div className='h-8 flex justify-between items-center'>
 				<h3>{section}</h3>
 
 				{sortedSectionArr?.length === 0 && (
@@ -85,19 +87,21 @@ export default function Section({ section, doc_uid, sectionArr }) {
 					</button>
 				)}
 			</div>
-			<motion.div
-				className='w-100 flex flex-col gap-4'
-				variants={todoContainerVariant}
-				initial='initial'
-				animate='animate'
-				exit='initial'
-			>
-				<AnimatePresence>
-					{sortedSectionArr?.map((todo) => (
-						<Todo key={todo.id} todo={todo} doc_uid={doc_uid} />
-					))}
-				</AnimatePresence>
-			</motion.div>
+			{sortedSectionArr?.length > 0 && (
+				<motion.div
+					className='w-full flex flex-col gap-4'
+					variants={todoContainerVariant}
+					initial='initial'
+					animate='animate'
+					exit='initial'
+				>
+					<AnimatePresence>
+						{sortedSectionArr?.map((todo) => (
+							<Todo key={todo.id} todo={todo} doc_uid={doc_uid} />
+						))}
+					</AnimatePresence>
+				</motion.div>
+			)}
 			{isAddSectionTodoOpen ? (
 				<form
 					onSubmit={(e) => {

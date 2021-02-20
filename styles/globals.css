@@ -139,18 +139,41 @@ input {
 }
 
 .btn {
-	@apply dark:bg-red-500 px-4 py-2 rounded font-medium;
+	@apply bg-opacity-75 hover:bg-opacity-100 bg-red-500 text-white dark:text-gray-800 px-4 py-2 rounded font-medium;
 }
 
 .btn-hollow {
-	@apply px-4 py-2 rounded opacity-90 hover:opacity-100 font-medium border-2 transition-colors border-red-500 text-red-500;
+	@apply px-4 py-2 rounded opacity-75 hover:opacity-100 font-medium border-2 transition-colors border-red-500 text-red-500;
+}
+
+.todo {
+}
+
+.todo-checkbox-container {
+	transition: background-color 250ms ease;
+	@apply bg-opacity-10;
+}
+
+.todo:hover .todo-checkbox-container {
+	@apply bg-opacity-50;
 }
 
 .todo-checkbox {
-	clip-path: ellipse(0% 0% at 50% 50%);
-	transition: clip-path 400ms ease;
+	opacity: 0;
+	transition: opacity 750ms ease;
 }
 
 .todo-checkbox-container:hover .todo-checkbox {
-	clip-path: ellipse(100% 100% at 50% 50%);
+	opacity: 1;
+	animation: todo-checkbox-clip-path 500ms;
+	transition: opacity 0ms ease;
+}
+
+@keyframes todo-checkbox-clip-path {
+	from {
+		clip-path: ellipse(0% 0% at 50% 50%);
+	}
+	to {
+		clip-path: ellipse(100% 100% at 50% 50%);
+	}
 }

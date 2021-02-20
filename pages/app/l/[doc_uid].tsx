@@ -6,6 +6,7 @@ import Section from '../../../components/layout/app/list/Section';
 import { I_User, useFirestore } from '../../../context/FirestoreContext';
 import { getValueFromRef } from '../../../helpers/getValueFromRef';
 import resetRefValue from '../../../helpers/resetRefValue';
+import useScrollOnDrag from '../../../hooks/useScrollOnDrag';
 
 interface I_ListItem {
 	completed: boolean;
@@ -25,6 +26,19 @@ export default function list_uid() {
 	const [sectionNames, setSectionNames] = useState<string[]>([]);
 	const [isAddFriendMenuOpen, setIsAddFriendMenuOpen] = useState(false);
 	const newSectionRef = useRef(null);
+	// section ref
+	const sectionContainerRef = useRef(null);
+	// section draggable scroll
+	const { events } = useScrollOnDrag(sectionContainerRef, {
+		onDragStart: () => {
+			document.body.style.userSelect = 'none';
+			sectionContainerRef.current.style.cursor = 'grabbing';
+		},
+		onDragEnd: () => {
+			document.body.style.userSelect = '';
+			sectionContainerRef.current.style.cursor = 'grab';
+		},
+	});
 	// get list_uid from page query
 	const router = useRouter();
 	const { doc_uid } = router.query;
@@ -62,9 +76,12 @@ export default function list_uid() {
 		e.preventDefault();
 		// get value and reset ref
 		const section = getValueFromRef(newSectionRef);
-		resetRefValue(newSectionRef);
-		// create new section
-		addNewSection(doc_uid, section);
+		console.log({ section, secEqu: section === '' });
+		if (section !== '') {
+			resetRefValue(newSectionRef);
+			// create new section
+			addNewSection(doc_uid, section);
+		}
 	}
 
 	// handle delting list
@@ -77,7 +94,7 @@ export default function list_uid() {
 		!loading && (
 			<div className='flex flex-col flex-grow overflow-hidden'>
 				<div className='px-2 grid grid-rows-2  md:px-6'>
-					<h2>{listRes?.title}</h2>
+					<h2 className='text-4xl mb-4'>{listRes?.title}</h2>
 					<div className='flex w-full justify-between mb-4'>
 						<button
 							className='btn'
@@ -107,8 +124,11 @@ export default function list_uid() {
 					</div>
 				)}
 				<div
+					{...events}
+					ref={sectionContainerRef}
 					style={{
 						gridTemplateColumns: `repeat(${sectionNames?.length + 1}, 24rem)`,
+						cursor: 'grab',
 					}}
 					className='h-full flex-grow grid break-all overflow-x-scroll gap-4 px-2 md:px-6'
 				>
@@ -121,9 +141,10 @@ export default function list_uid() {
 						/>
 					))}
 					<form
-						className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-2'
+						className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-4 mt-4'
 						onSubmit={handleAddNewSection}
 					>
+						<div className='h-8' />
 						<input
 							placeholder='Add a new section'
 							type='text'
