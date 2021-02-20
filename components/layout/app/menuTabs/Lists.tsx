@@ -31,7 +31,7 @@ export default function Lists({ closeMenu }) {
 					ref={newListRef}
 				/>
 				<button
-					className='w-10 h-10 text-red-500 border border-red-500 rounded text-2xl flex justify-center items-center'
+					className='w-10 h-10 text-red-500 border-2 p-2 border-red-500 rounded text-2xl flex justify-center items-center'
 					type='submit'
 				>
 					<svg

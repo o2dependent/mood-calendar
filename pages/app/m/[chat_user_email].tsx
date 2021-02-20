@@ -50,16 +50,21 @@ export default function chat() {
 	};
 
 	return (
-		<div className='flex flex-col justify-end h-full'>
-			{messages?.length > 0 && messages.map((msg) => <Message msg={msg} />)}
-			<form onSubmit={handleSubmit} className='h-12'>
-				<input
-					className='fixed bottom-1 left-0 md:static mb-0'
-					type='text'
-					required
-					ref={chatMessageRef}
-				/>
-			</form>
+		<div className='flex w-full'>
+			<div className='h-16 pl-4 dark:bg-gray-900 w-96'>
+				<p>fuckkin what</p>
+			</div>
+			<div className='flex flex-col justify-end w-full max-w-screen-lg h-full ml-4'>
+				{messages?.length > 0 && messages.map((msg) => <Message msg={msg} />)}
+				<form onSubmit={handleSubmit} className='h-12'>
+					<input
+						className='fixed bottom-1 left-0 md:static mb-0'
+						type='text'
+						required
+						ref={chatMessageRef}
+					/>
+				</form>
+			</div>
 		</div>
 	);
 }
@@ -69,13 +74,15 @@ function Message({ msg }) {
 	const { currentUser } = useAuth();
 	const messageClass =
 		email === currentUser.email
-			? 'ml-auto bg-gray-200 dark:text-black'
-			: 'bg-red-500 text-white';
+			? 'ml-auto bg-gray-200 dark:text-black rounded-br-none'
+			: 'bg-red-500 text-white rounded-bl-none';
 	const containerClass = email === currentUser.email ? 'ml-auto' : '';
 
 	return (
 		<div className={`mb-2 max-w-10/12 h-auto ${containerClass}`}>
-			<p className={`rounded p-2 inline-block w-auto ${messageClass}`}>
+			<p
+				className={`rounded-xl cursor-default max-w-prose p-2 px-4 inline-block w-auto ${messageClass}`}
+			>
 				{text}
 			</p>
 		</div>

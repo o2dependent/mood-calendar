@@ -22,26 +22,33 @@ export default function Todo({ todo, doc_uid }) {
 	// --- framer motion variants ---
 	const todoVariant = {
 		initial: {
-			opacity: 0,
+			borderWidth: '0px',
+			height: '0rem',
+			padding: '0rem 0rem',
+			margin: '0rem 0rem 0rem 0rem',
 			transition: {
 				duration: 0.5,
 			},
 		},
 		animate: {
-			opacity: 1,
+			borderWidth: '1px',
+			height: '2.5rem',
+			padding: '0.5rem 0.5rem',
+			margin: '0rem 0rem 1rem 0rem',
 			transition: {
-				duration: 1,
+				duration: 0.5,
 			},
 		},
 	};
 	return (
 		<motion.button
+			whileTap={{ scaleY: 0.95 }}
 			variants={todoVariant}
 			initial='initial'
 			animate='animate'
 			exit='initial'
 			key={todo.id}
-			className='todo grid w-96 max-w-full gap-2 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors bg-opacity-5 items-center p-2 rounded border border-gray-500 border-opacity-50 focus:ring-2 ring-blue-200 ring-opacity-20 focus:outline-none'
+			className='todo mb-4 overflow-hidden grid w-96 max-w-full gap-2 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors bg-opacity-5 items-center p-2 rounded border border-gray-500 border-opacity-50 focus:ring-2 ring-blue-200 ring-opacity-20 focus:outline-none'
 			style={{
 				gridTemplateColumns: '1.25rem 1fr',
 			}}

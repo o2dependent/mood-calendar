@@ -51,12 +51,8 @@ export default function Section({ section, doc_uid, sectionArr }) {
 		},
 	};
 	const todoContainerVariant = {
-		initial: {
-			opacity: 0,
-		},
-		animate: {
-			opacity: 1,
-		},
+		initial: {},
+		animate: {},
 	};
 
 	return (
@@ -64,10 +60,10 @@ export default function Section({ section, doc_uid, sectionArr }) {
 			variants={sectionVariant}
 			initial='initial'
 			animate='animate'
-			className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-4 mt-4'
+			className='flex md:w-96 md:min-w-max min-w-9/10 flex-col my-4'
 			key={section}
 		>
-			<div className='h-8 flex justify-between items-center'>
+			<div className='h-8 flex justify-between items-center mb-4'>
 				<h3>{section}</h3>
 
 				{sortedSectionArr?.length === 0 && (
@@ -89,7 +85,7 @@ export default function Section({ section, doc_uid, sectionArr }) {
 			</div>
 			{sortedSectionArr?.length > 0 && (
 				<motion.div
-					className='w-full flex flex-col gap-4'
+					className='w-full flex flex-col'
 					variants={todoContainerVariant}
 					initial='initial'
 					animate='animate'

@@ -15,7 +15,7 @@ export default function AppLayout({ children }) {
 					isMenuOpen={isMenuOpen}
 					closeMenu={() => setIsMenuOpen(false)}
 				/>
-				<div className='pt-10 w-full flex'>{children}</div>
+				<div className='w-full flex'>{children}</div>
 			</div>
 		</div>
 	);
