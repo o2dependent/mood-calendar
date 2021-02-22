@@ -83,21 +83,19 @@ export default function Section({ section, doc_uid, sectionArr }) {
 					</button>
 				)}
 			</div>
-			{sortedSectionArr?.length > 0 && (
-				<motion.div
-					className='w-full flex flex-col'
-					variants={todoContainerVariant}
-					initial='initial'
-					animate='animate'
-					exit='initial'
-				>
-					<AnimatePresence>
-						{sortedSectionArr?.map((todo) => (
-							<Todo key={todo.id} todo={todo} doc_uid={doc_uid} />
-						))}
-					</AnimatePresence>
-				</motion.div>
-			)}
+			<motion.div
+				className='w-full flex flex-col'
+				variants={todoContainerVariant}
+				initial='initial'
+				animate='animate'
+				exit='initial'
+			>
+				<AnimatePresence>
+					{sortedSectionArr?.map((todo) => (
+						<Todo key={todo.id} todo={todo} doc_uid={doc_uid} />
+					))}
+				</AnimatePresence>
+			</motion.div>
 			{isAddSectionTodoOpen ? (
 				<form
 					onSubmit={(e) => {

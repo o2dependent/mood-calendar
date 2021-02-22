@@ -42,7 +42,8 @@ export default function Todo({ todo, doc_uid }) {
 	};
 	return (
 		<motion.button
-			whileTap={{ scaleY: 0.95 }}
+			whileTap={{ scale: 0.95 }}
+			whileHover={{ scale: 1.05 }}
 			variants={todoVariant}
 			initial='initial'
 			animate='animate'
