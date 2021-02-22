@@ -145,12 +145,27 @@ export default function list_uid() {
 						onSubmit={handleAddNewSection}
 					>
 						<div className='h-8' />
-						<input
-							placeholder='Add a new section'
-							type='text'
-							ref={newSectionRef}
-						/>
-						<button type='submit'>Add new section</button>
+						<div className='flex w-full'>
+							<input
+								placeholder='Add a new section'
+								type='text'
+								ref={newSectionRef}
+							/>
+							<button
+								className='w-10 h-10 rounded bg-gray-500 flex justify-center items-center'
+								type='submit'
+							>
+								<svg
+									fill='currentColor'
+									xmlns='http://www.w3.org/2000/svg'
+									width='17'
+									height='17'
+									viewBox='0 0 24 24'
+								>
+									<path d='M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z' />
+								</svg>
+							</button>
+						</div>
 					</form>
 				</div>
 			</div>

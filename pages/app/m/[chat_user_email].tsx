@@ -52,7 +52,7 @@ export default function chat() {
 	return (
 		<div className='flex w-full'>
 			<div className='h-16 pl-4 dark:bg-gray-900 w-96'>
-				<p>fuckkin what</p>
+				<p></p>
 			</div>
 			<div className='flex flex-col justify-end w-full max-w-screen-lg h-full ml-4'>
 				{messages?.length > 0 && messages.map((msg) => <Message msg={msg} />)}
