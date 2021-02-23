@@ -92,8 +92,8 @@ export default function list_uid() {
 
 	return (
 		!loading && (
-			<div className='flex flex-col flex-grow overflow-hidden pt-10'>
-				<div className='px-2 grid grid-rows-2  md:px-6'>
+			<div className='flex flex-col overflow-hidden pt-10 flex-grow'>
+				<div className='px-2 grid grid-rows-2 md:px-6'>
 					<h2 className='text-4xl mb-4'>{listRes?.title}</h2>
 					<div className='flex w-full justify-between mb-4'>
 						<button

@@ -14,7 +14,7 @@ export default function Home() {
 			</Head>
 			<HomeNav />
 			<div className='container flex flex-col justify-center align-center mx-auto min-h-100 flex-grow pb-24'>
-				<h1 className='mx-auto md:w-9/12 w-full text-center font-light leading-tight'>
+				<h1 className='mx-auto md:w-9/12 w-full text-center font-light leading-tight text-5xl'>
 					<span className='box-accent'>Plan</span> better with your friends.
 				</h1>
 				<p className='mx-auto md:w-7/12 w-9/12 text-center mt-10'>

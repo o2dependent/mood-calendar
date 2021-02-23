@@ -48,7 +48,7 @@ export default function signup() {
 					onSubmit={handleSubmit}
 					className='flex flex-col p-4 md:p-8 mx-auto w-full md:w-5/6 max-w-xl'
 				>
-					<h2 className='box-accent text-center w-32 mx-auto p-3 mb-10'>
+					<h2 className='box-accent text-center w-32 mx-auto p-3 mb-10 text-2xl'>
 						Log in
 					</h2>
 					{error && (
@@ -61,11 +61,16 @@ export default function signup() {
 					)}
 					<div className='mb-3'>
 						<label>Email</label>
-						<Input ref={emailRef} type='email' required />
+						<input className='w-full' ref={emailRef} type='email' required />
 					</div>
 					<div className='mb-3'>
 						<label>Password</label>
-						<Input ref={passwordRef} type='password' required />
+						<input
+							className='w-full'
+							ref={passwordRef}
+							type='password'
+							required
+						/>
 					</div>
 					<button
 						tabIndex={0}

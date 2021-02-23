@@ -15,8 +15,10 @@ export function DarkModeProvider({ children }) {
 	);
 	// set initial dark mode based on client local storage
 	useEffect(() => {
-		const localDarkMode: I_DarkMode = getClientDarkMode();
-		setClientDarkMode(localDarkMode);
+		// *** prevent dark mode while settings page is disabled ***
+		// TODO: reinstate darkmode when setttings page is navigatable
+		// const localDarkMode: I_DarkMode = getClientDarkMode();
+		// setClientDarkMode(localDarkMode);
 	}, []);
 
 	// --- functions ---

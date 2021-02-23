@@ -106,27 +106,25 @@ input {
 	@apply w-10 h-10;
 }
 
+.nav-menu-container {
+	box-shadow: 0 0 10px 1px #00000012;
+	transition: width var(--delay);
+	@apply w-72 overflow-hidden h-full;
+}
+
+.nav-menu-container.closed {
+	@apply w-0;
+}
+
 .nav-menu {
 	z-index: 1;
 	background-color: #fafafa;
-	box-shadow: 0 0 10px 1px #00000012;
-	transition: left var(--delay);
-	@apply md:pt-9 md:px-4 md:w-96 md:left-0 dark:shadow-md-dark -left-full p-4 w-full h-full fixed;
-}
-
-.nav-menu.open {
-	@apply left-0;
+	@apply md:pt-9 md:px-4 w-full dark:shadow-md-dark p-4 h-full;
 }
 
 .content-wrapper {
 	--delay: 500ms ease;
-	transition: width var(--delay), margin var(--delay);
-	@apply flex flex-row flex-grow w-full relative md:ml-96;
-}
-@media screen and (min-width: 768px) {
-	.content-wrapper {
-		width: calc(100% - 24rem);
-	}
+	@apply flex flex-row flex-grow w-full relative;
 }
 
 .inbox-tab__title {

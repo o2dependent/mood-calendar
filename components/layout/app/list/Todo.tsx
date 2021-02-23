@@ -42,14 +42,14 @@ export default function Todo({ todo, doc_uid }) {
 	};
 	return (
 		<motion.button
-			whileTap={{ scale: 0.95 }}
 			whileHover={{ scale: 1.05 }}
+			whileFocus={{ scale: 1.05 }}
 			variants={todoVariant}
 			initial='initial'
 			animate='animate'
 			exit='initial'
 			key={todo.id}
-			className='todo mb-4 overflow-hidden grid w-96 max-w-full gap-2 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors bg-opacity-5 items-center p-2 rounded border border-gray-500 border-opacity-50 focus:ring-2 ring-blue-200 ring-opacity-20 focus:outline-none'
+			className='todo mb-4 overflow-hidden grid w-96 max-w-full gap-2 hover:bg-gray-50 dark:hover:bg-gray-900 transition-colors bg-opacity-5 items-center p-2 rounded border border-gray-500 border-opacity-50  focus:bg-gray-50 focus:hover:bg-gray-900 focus:ring-2 ring-blue-200 ring-opacity-20 focus:outline-none'
 			style={{
 				gridTemplateColumns: '1.25rem 1fr',
 			}}

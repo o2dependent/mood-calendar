@@ -4,7 +4,7 @@ import { useFirestore } from '../../../../context/FirestoreContext';
 import { getValueFromRef } from '../../../../helpers/getValueFromRef';
 import resetRefValue from '../../../../helpers/resetRefValue';
 
-export default function Lists({ closeMenu }) {
+export default function Lists({}) {
 	// --- hooks ---
 	const { lists, addNewList } = useFirestore();
 	const newListRef = useRef(null);
@@ -48,10 +48,7 @@ export default function Lists({ closeMenu }) {
 			{lists?.length > 0 &&
 				lists.map((list) => (
 					<Link href={`/app/l/${list.id}`} key={list.id}>
-						<a
-							onClick={closeMenu}
-							className='flex items-center dark:bg-gray-800 bg-gray-200 h-12 w-full p-2 rounded border border-white border-opacity-10 hover:bg-gray-300 dark:hover:bg-gray-900'
-						>
+						<a className='flex items-center dark:bg-gray-800 bg-gray-200 h-12 w-full p-2 rounded border border-white border-opacity-10 hover:bg-gray-300 dark:hover:bg-gray-900'>
 							<p className=''>{list.title}</p>
 						</a>
 					</Link>
