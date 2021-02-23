@@ -119,12 +119,11 @@ input {
 .nav-menu {
 	z-index: 1;
 	background-color: #fafafa;
-	@apply md:pt-9 md:px-4 w-full dark:shadow-md-dark p-4 h-full;
 }
 
 .content-wrapper {
 	--delay: 500ms ease;
-	@apply flex flex-row flex-grow w-full relative;
+	@apply flex flex-col flex-grow w-full relative;
 }
 
 .inbox-tab__title {

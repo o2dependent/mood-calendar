@@ -4,7 +4,7 @@ import React, { useRef } from 'react';
 import { useFirestore } from '../../../../context/FirestoreContext';
 import { getValueFromRef } from '../../../../helpers/getValueFromRef';
 
-export default function Friends({ closeMenu }) {
+export default function Friends({}) {
 	// --- hooks ---
 	const {
 		sendFriendRequest,
@@ -89,7 +89,6 @@ export default function Friends({ closeMenu }) {
 						friends.map((friend) => (
 							<Link href={`/app/m/${friend}`}>
 								<a
-									onClick={closeMenu}
 									key={friend}
 									className='flex items-center dark:bg-gray-800 bg-gray-200 h-12 w-full p-2 rounded border border-white border-opacity-10 hover:bg-gray-300 dark:hover:bg-gray-900'
 								>
