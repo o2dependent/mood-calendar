@@ -2,16 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { firebase } from '../helpers/firebase';
 import { useAuth } from './AuthContext';
 import { firestore } from '../helpers/firebase';
-import {
-	useCollection,
-	useCollectionData,
-	useDocument,
-	useDocumentData,
-	useDocumentOnce,
-} from 'react-firebase-hooks/firestore';
+import { useCollection, useDocumentData } from 'react-firebase-hooks/firestore';
 
 // TODO: when editing the friends list schema change this to maintain strong typing
-export type I_User = string;
+export type I_User = {
+	email: string;
+	displayName: string;
+	avatar: string;
+};
 interface I_FriendRes {
 	friends: I_User[];
 	pending: I_User[];
@@ -27,10 +25,16 @@ export function useFirestore() {
 export function FirestoreProvider({ children }) {
 	// --- hooks ---
 	const { currentUser } = useAuth();
-	const [friends, setFriends] = useState<I_User[]>([]);
+	const [friends, setFriends] = useState<I_User[] | []>([]);
 	const [pendingRequests, setPendingRequests] = useState([]);
 	const [sentRequests, setSentRequests] = useState([]);
 	const [lists, setLists] = useState([]);
+
+	// --- variables ---
+	const curUserReduced = {
+		email: currentUser.email,
+		displayName: currentUser.displayName,
+	};
 
 	// --- collection refs ---
 	const messagesRef = firestore.collection('messages');
@@ -95,7 +99,7 @@ export function FirestoreProvider({ children }) {
 		await friendsRef
 			.doc(friendEmail)
 			.update({
-				pending: firebase.firestore.FieldValue.arrayUnion(currentUser.email),
+				pending: firebase.firestore.FieldValue.arrayUnion(curUserReduced),
 			})
 			.then(
 				async () =>
@@ -114,28 +118,28 @@ export function FirestoreProvider({ children }) {
 		return;
 	}
 	// accept friend request
-	async function acceptFriendRequest(friendEmail: string) {
+	async function acceptFriendRequest(friendObj: I_User) {
 		try {
-			await friendsRef.doc(friendEmail).update({
-				friends: firebase.firestore.FieldValue.arrayUnion(currentUser.email),
-				sent: firebase.firestore.FieldValue.arrayRemove(currentUser.email),
+			await friendsRef.doc(friendObj.email).update({
+				friends: firebase.firestore.FieldValue.arrayUnion(curUserReduced),
+				sent: firebase.firestore.FieldValue.arrayRemove(curUserReduced.email),
 			});
 			await friendsRef.doc(currentUser.email).update({
-				friends: firebase.firestore.FieldValue.arrayUnion(friendEmail),
-				pending: firebase.firestore.FieldValue.arrayRemove(friendEmail),
+				friends: firebase.firestore.FieldValue.arrayUnion(friendObj),
+				pending: firebase.firestore.FieldValue.arrayRemove(friendObj),
 			});
 		} catch (err) {
 			console.error(err);
 		}
 	}
 	// decline friend request
-	async function declineFriendRequest(friendEmail: string) {
+	async function declineFriendRequest(friendObj: I_User) {
 		try {
-			await friendsRef.doc(friendEmail).update({
-				sent: firebase.firestore.FieldValue.arrayRemove(currentUser.email),
+			await friendsRef.doc(friendObj.email).update({
+				sent: firebase.firestore.FieldValue.arrayRemove(curUserReduced),
 			});
-			await friendsRef.doc(currentUser.email).update({
-				pending: firebase.firestore.FieldValue.arrayRemove(friendEmail),
+			await friendsRef.doc(curUserReduced.email).update({
+				pending: firebase.firestore.FieldValue.arrayRemove(friendObj),
 			});
 		} catch (err) {
 			console.error(err);
@@ -241,10 +245,10 @@ export function FirestoreProvider({ children }) {
 		}
 	}
 	// add friend to list
-	async function addFriendToList(listId: string, friendEmail: string) {
+	async function addFriendToList(listId: string, friendObj: I_User) {
 		try {
 			await listsDisplayRef.doc(listId).update({
-				users: firebase.firestore.FieldValue.arrayUnion(friendEmail),
+				users: firebase.firestore.FieldValue.arrayUnion(friendObj.email),
 			});
 		} catch (err) {
 			console.error(err);

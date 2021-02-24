@@ -18,6 +18,7 @@ export default function signup() {
 	const emailRef = useRef();
 	const passwordRef = useRef();
 	const passwordConfirmRef = useRef();
+	const displayNameRef = useRef();
 
 	// --- context ---
 	const { signup } = useAuth();
@@ -29,19 +30,24 @@ export default function signup() {
 		const password: string = getValueFromRef(passwordRef);
 		const passwordConfirm: string = getValueFromRef(passwordConfirmRef);
 		const email: string = getValueFromRef(emailRef);
+		const displayName: string = getValueFromRef(displayNameRef);
+
+		// no display name
+		if (displayName === '') return setError('Please enter a display name');
+		// no display name
+		if (email === '') return setError('Please enter your email');
 		// return if password do not meet
-		if (password !== passwordConfirm) {
-			return setError('Passwords do not match');
-		}
+		if (password !== passwordConfirm) return setError('Passwords do not match');
+
 		// sign up user
 		try {
 			setLoading(true);
-			await signup(email, password);
+			await signup(email, password, displayName);
+			router.push('/app');
 		} catch (err) {
 			return setError('Failed to create new account');
 		}
 		setLoading(false);
-		router.push('/app');
 	};
 
 	// --- markup ---
@@ -64,6 +70,18 @@ export default function signup() {
 							<span className=''>{error}</span>
 						</div>
 					)}
+					<div className='mb-3'>
+						<label>
+							Display name{'   '}
+							<span className='opacity-50'>( full name preferred )</span>
+						</label>
+						<input
+							className='w-full'
+							ref={displayNameRef}
+							type='text'
+							required
+						/>
+					</div>
 					<div className='mb-3'>
 						<label>Email</label>
 						<input className='w-full' ref={emailRef} type='email' required />

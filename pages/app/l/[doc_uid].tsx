@@ -45,6 +45,7 @@ export default function list_uid() {
 	// get listRef from firestore
 	const {
 		listsDisplayRef,
+		usersRef,
 		deleteList,
 		addNewSection,
 		friends,
@@ -111,13 +112,13 @@ export default function list_uid() {
 					<div className='flex flex-col gap-2 px-2 md:px-6'>
 						{friends &&
 							friends.map((friend) => {
-								return listRes?.users?.includes(friend) ? null : (
+								return listRes?.users?.includes(friend?.email) ? null : (
 									<button
 										onClick={() => addFriendToList(doc_uid, friend)}
-										key={friend}
+										key={friend?.email}
 										className='flex items-center rounded dark:bg-gray-800 bg-gray-200 h-10 w-full p-2'
 									>
-										<p className=''>{friend}</p>
+										<p className=''>{friend?.displayName}</p>
 									</button>
 								);
 							})}

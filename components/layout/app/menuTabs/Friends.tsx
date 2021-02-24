@@ -61,10 +61,12 @@ export default function Friends({}) {
 								initial='initial'
 								animate='animate'
 								exit='initial'
-								key={friend}
+								key={friend.email}
 								className='bg-gray-200 grid grid-cols-2 grid-rows-2 gap-x-2 dark:bg-gray-800 rounded h-24 w-full p-2 border border-white border-opacity-10 hover:bg-gray-300 dark:hover:bg-gray-900'
 							>
-								<p className='text-md w-full text-lg col-span-2'>{friend}</p>
+								<p className='text-md w-full text-lg col-span-2'>
+									{friend.displayName}
+								</p>
 								<button
 									onClick={() => declineFriendRequest(friend)}
 									className='bg-gray-50  dark:bg-gray-700 dark:text-gray-400 font-medium text-gray-700 p-1 w-full h-10 rounded'
@@ -87,13 +89,13 @@ export default function Friends({}) {
 				<div className='flex flex-col gap-4'>
 					{friends &&
 						friends.map((friend) => (
-							<Link href={`/app/m/${friend}`}>
+							<Link href={`/app/m/${friend.email}`}>
 								<a
-									key={friend}
+									key={friend.email}
 									className='flex items-center dark:bg-gray-800 bg-gray-200 h-12 w-full p-2 rounded border border-white border-opacity-10 hover:bg-gray-300 dark:hover:bg-gray-900'
 								>
-									<p className=''>{friend}</p>
-									{/* <button onClick={() => removeFriend(friend)}>Remove</button> */}
+									<p className=''>{friend.displayName}</p>
+									{/* <button onClick={() => removeFriend(friend.email)}>Remove</button> */}
 								</a>
 							</Link>
 						))}
@@ -105,10 +107,10 @@ export default function Friends({}) {
 					<div className='flex flex-col gap-4'>
 						{sentRequests.map((friend) => (
 							<div
-								key={friend}
+								key={friend.email}
 								className='flex items-center dark:bg-gray-800 bg-gray-200 h-10 w-full p-2 rounded border border-white border-opacity-25 opacity-50'
 							>
-								<p className='text-base'>{friend}</p>
+								<p className='text-base'>{friend.split('@')[0]}</p>
 							</div>
 						))}
 					</div>
