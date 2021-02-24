@@ -40,8 +40,9 @@ export default function Chat({ doc_uid }) {
 	useEffect(() => {
 		const newMessages = messagesRes;
 		setMessages(newMessages);
-		if (dummyRef?.current) {
-			dummyRef?.current.scrollIntoView({ behavior: 'smooth' });
+		const current = dummyRef?.current ?? { scrollIntoView: (n) => null };
+		if (current) {
+			current.scrollIntoView({ behavior: 'smooth' });
 		}
 	}, [messagesRes]);
 
