@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import React, { useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
+import Chat from '../../../pages/app/m/[user_email]';
 import Friends from './menuTabs/Friends';
 
 export default function ContactMenu({ isMenuOpen, toggleMenu }) {

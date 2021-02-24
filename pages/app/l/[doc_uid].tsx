@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import { useCollection, useDocumentData } from 'react-firebase-hooks/firestore';
+import Chat from '../../../components/app/Chat';
 import Section from '../../../components/layout/app/list/Section';
 import { I_User, useFirestore } from '../../../context/FirestoreContext';
 import { getValueFromRef } from '../../../helpers/getValueFromRef';
@@ -25,29 +26,15 @@ export default function list_uid() {
 	const [sections, setSections] = useState<object>({});
 	const [sectionNames, setSectionNames] = useState<string[]>([]);
 	const [isAddFriendMenuOpen, setIsAddFriendMenuOpen] = useState(false);
-	const newSectionRef = useRef(null);
-	// section ref
-	const sectionContainerRef = useRef(null);
-	// section draggable scroll
-	const { events } = useScrollOnDrag(sectionContainerRef, {
-		onDragStart: () => {
-			document.body.style.userSelect = 'none';
-			sectionContainerRef.current.style.cursor = 'grabbing';
-		},
-		onDragEnd: () => {
-			document.body.style.userSelect = '';
-			sectionContainerRef.current.style.cursor = 'grab';
-		},
-	});
+	const [todosOpen, setTodosOpen] = useState(true);
+
 	// get list_uid from page query
 	const router = useRouter();
 	const { doc_uid } = router.query;
 	// get listRef from firestore
 	const {
 		listsDisplayRef,
-		usersRef,
 		deleteList,
-		addNewSection,
 		friends,
 		addFriendToList,
 	} = useFirestore();
@@ -72,19 +59,6 @@ export default function list_uid() {
 		setSectionNames(Object?.keys(newTodos));
 	}, [todosRes, listRes]);
 
-	// handle submit of aqdding new section
-	function handleAddNewSection(e) {
-		e.preventDefault();
-		// get value and reset ref
-		const section = getValueFromRef(newSectionRef);
-		console.log({ section, secEqu: section === '' });
-		if (section !== '') {
-			resetRefValue(newSectionRef);
-			// create new section
-			addNewSection(doc_uid, section);
-		}
-	}
-
 	// handle delting list
 	function handleDeleteList() {
 		deleteList(doc_uid);
@@ -97,12 +71,20 @@ export default function list_uid() {
 				<div className='px-2 grid grid-rows-2  md:px-6'>
 					<h2 className='text-4xl mb-4'>{listRes?.title}</h2>
 					<div className='flex w-full justify-between mb-4'>
-						<button
-							className='btn'
-							onClick={() => setIsAddFriendMenuOpen(!isAddFriendMenuOpen)}
-						>
-							Add friend to list
-						</button>
+						<div>
+							<button
+								className='btn'
+								onClick={() => setIsAddFriendMenuOpen(!isAddFriendMenuOpen)}
+							>
+								Add friend to list
+							</button>
+							<button
+								className='ml-2 btn'
+								onClick={() => setTodosOpen(!todosOpen)}
+							>
+								{todosOpen ? 'Messages' : 'Todos'}
+							</button>
+						</div>
 						<button className='btn-hollow ml-auto' onClick={handleDeleteList}>
 							Delete List
 						</button>
@@ -124,52 +106,97 @@ export default function list_uid() {
 							})}
 					</div>
 				)}
-				<div
-					{...events}
-					ref={sectionContainerRef}
-					style={{
-						gridTemplateColumns: `repeat(${sectionNames?.length + 1}, 24rem)`,
-						cursor: 'grab',
-					}}
-					className='h-full flex-grow grid break-all overflow-x-scroll gap-4 px-2 md:px-6'
-				>
-					{sectionNames?.map((section) => (
-						<Section
-							sectionArr={sections[section]}
-							section={section}
-							doc_uid={doc_uid}
-							key={section}
-						/>
-					))}
-					<form
-						className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-4 mt-4'
-						onSubmit={handleAddNewSection}
-					>
-						<div className='h-8' />
-						<div className='flex w-full'>
-							<input
-								placeholder='Add a new section'
-								type='text'
-								ref={newSectionRef}
-							/>
-							<button
-								className='w-10 h-10 rounded bg-gray-500 flex justify-center items-center'
-								type='submit'
-							>
-								<svg
-									fill='currentColor'
-									xmlns='http://www.w3.org/2000/svg'
-									width='17'
-									height='17'
-									viewBox='0 0 24 24'
-								>
-									<path d='M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z' />
-								</svg>
-							</button>
-						</div>
-					</form>
-				</div>
+				{todosOpen ? (
+					<TodoDisplay
+						doc_uid={doc_uid}
+						sectionNames={sectionNames}
+						sections={sections}
+					/>
+				) : (
+					<Chat doc_uid={doc_uid} />
+				)}
 			</div>
 		)
 	);
 }
+
+const TodoDisplay = ({ sectionNames, sections, doc_uid }) => {
+	// get listRef from firestore
+	const { addNewSection } = useFirestore();
+
+	// section ref
+	const sectionContainerRef = useRef(null);
+	const newSectionRef = useRef(null);
+
+	// section draggable scroll
+	const { events } = useScrollOnDrag(sectionContainerRef, {
+		onDragStart: () => {
+			document.body.style.userSelect = 'none';
+			sectionContainerRef.current.style.cursor = 'grabbing';
+		},
+		onDragEnd: () => {
+			document.body.style.userSelect = '';
+			sectionContainerRef.current.style.cursor = 'grab';
+		},
+	});
+
+	// handle submit of aqdding new section
+	function handleAddNewSection(e) {
+		e.preventDefault();
+		// get value and reset ref
+		const section = getValueFromRef(newSectionRef);
+		console.log({ section, secEqu: section === '' });
+		if (section !== '') {
+			resetRefValue(newSectionRef);
+			// create new section
+			addNewSection(doc_uid, section);
+		}
+	}
+	return (
+		<div
+			{...events}
+			ref={sectionContainerRef}
+			style={{
+				gridTemplateColumns: `repeat(${sectionNames?.length + 1}, 24rem)`,
+				cursor: 'grab',
+			}}
+			className='h-full flex-grow grid break-all overflow-x-scroll gap-4 px-2 md:px-6'
+		>
+			{sectionNames?.map((section) => (
+				<Section
+					sectionArr={sections[section]}
+					section={section}
+					doc_uid={doc_uid}
+					key={section}
+				/>
+			))}
+			<form
+				className='flex md:w-96 md:min-w-max min-w-9/10 flex-col gap-4 mt-4'
+				onSubmit={handleAddNewSection}
+			>
+				<div className='h-8' />
+				<div className='flex w-full'>
+					<input
+						placeholder='Add a new section'
+						type='text'
+						ref={newSectionRef}
+					/>
+					<button
+						className='w-10 h-10 rounded bg-gray-500 flex justify-center items-center'
+						type='submit'
+					>
+						<svg
+							fill='currentColor'
+							xmlns='http://www.w3.org/2000/svg'
+							width='17'
+							height='17'
+							viewBox='0 0 24 24'
+						>
+							<path d='M24 10h-10v-10h-4v10h-10v4h10v10h4v-10h10z' />
+						</svg>
+					</button>
+				</div>
+			</form>
+		</div>
+	);
+};

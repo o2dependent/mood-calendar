@@ -161,7 +161,7 @@ input {
 }
 
 .todo:hover .todo-checkbox-container {
-	@apply bg-opacity-50;
+	@apply bg-opacity-25;
 }
 
 .todo-checkbox {

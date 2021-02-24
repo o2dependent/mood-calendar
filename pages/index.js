@@ -18,8 +18,7 @@ export default function Home() {
 					<span className='box-accent'>Plan</span> better with your friends.
 				</h1>
 				<p className='mx-auto md:w-7/12 w-9/12 text-center mt-10'>
-					Keep your plans synced with your friends and family. Never forget your
-					plans again.
+					Keep your plans synced with your friends and family.
 				</p>
 				<div className='mt-10 max-w-lg mx-auto'>
 					<NavLink lg isAction href='/signup'>

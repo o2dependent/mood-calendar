@@ -16,14 +16,18 @@ interface I_MessageRes {
 	messages: I_Message[];
 }
 
-export default function chat() {
+interface I_ChatProps {
+	userEmail: string;
+}
+
+export default function Chat() {
 	// --- hooks ---
 	const [messages, setMessages] = useState<Array<I_Message>>([]);
 	const { currentUser } = useAuth();
 	const { messagesRef, sendMessage } = useFirestore();
 	const router = useRouter();
-	const { chat_user_email } = router.query;
-	const docName = [currentUser.email, chat_user_email].sort().join('_');
+	const { userEmail } = router.query;
+	const docName = [currentUser.email, userEmail].sort().join('_');
 	const chatMessageRef = useRef();
 
 	// --- query ---
@@ -50,15 +54,15 @@ export default function chat() {
 	};
 
 	return (
-		<div className='flex w-full'>
+		<div className='flex flex-col w-full'>
 			<div className='h-16 pl-4 dark:bg-gray-900 w-96'>
 				<p></p>
 			</div>
 			<div className='flex flex-col justify-end w-full max-w-screen-lg h-full ml-4'>
 				{messages?.length > 0 && messages.map((msg) => <Message msg={msg} />)}
-				<form onSubmit={handleSubmit} className='h-12'>
+				<form onSubmit={handleSubmit} className='h-12 w-full'>
 					<input
-						className='fixed bottom-1 left-0 md:static mb-0'
+						className='w-full mb-0 bg-gray-100'
 						type='text'
 						required
 						ref={chatMessageRef}

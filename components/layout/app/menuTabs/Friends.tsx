@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React, { useRef } from 'react';
 import { useFirestore } from '../../../../context/FirestoreContext';
 import { getValueFromRef } from '../../../../helpers/getValueFromRef';
+import Avatar from '../../../app/Avatar';
 
 export default function Friends({}) {
 	// --- hooks ---
@@ -94,6 +95,7 @@ export default function Friends({}) {
 									key={friend.email}
 									className='flex items-center dark:bg-gray-800 bg-gray-200 h-12 w-full p-2 rounded border border-white border-opacity-10 hover:bg-gray-300 dark:hover:bg-gray-900'
 								>
+									<Avatar avatarName={friend.avatar} />
 									<p className=''>{friend.displayName}</p>
 									{/* <button onClick={() => removeFriend(friend.email)}>Remove</button> */}
 								</a>

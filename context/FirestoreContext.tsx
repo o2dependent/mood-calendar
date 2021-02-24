@@ -70,23 +70,22 @@ export function FirestoreProvider({ children }) {
 
 	// --- functions ---
 	// TODO: Update send message with friend display name or email
-	async function sendMessage(text: string, docName: string) {
+	async function sendMessage(text: string, doc_uid: string) {
 		const message = {
 			text: text,
 			email: currentUser.email,
 			createdAt: new Date(),
 		};
 		try {
-			await messagesRef.doc(docName).update({
-				messages: firebase.firestore.FieldValue.arrayUnion(message),
-			});
+			await listsDisplayRef.doc(doc_uid).collection('messages').add(message);
 			return;
 		} catch (err) {
 			console.error(err);
 			try {
-				await messagesRef.doc(docName).set({
-					messages: firebase.firestore.FieldValue.arrayUnion(message),
-				});
+				await await listsDisplayRef
+					.doc(doc_uid)
+					.collection('messages')
+					.add(message);
 				return;
 			} catch (err) {
 				console.error(err);
