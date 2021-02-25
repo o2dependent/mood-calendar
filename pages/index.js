@@ -9,7 +9,6 @@ export default function Home() {
 	return (
 		<div className='flex flex-col h-full'>
 			<Head>
-				<title>Create Next App</title>
 				<link rel='icon' href='/favicon.ico' />
 			</Head>
 			<HomeNav />
